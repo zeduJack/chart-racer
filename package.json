@@ -7,8 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "remotion:studio": "npx remotion studio src/remotion/Root.tsx",
-    "remotion:render": "npx remotion render src/remotion/Root.tsx BarChartRace"
+    "remotion:studio": "npx remotion studio src/remotion/index.ts",
+    "remotion:render": "npx remotion render src/remotion/index.ts BarChartRace",
+    "remotion:still": "npx remotion still src/remotion/index.ts BarChartRace"
   },
   "dependencies": {
     "@remotion/cli": "4.0.441",
