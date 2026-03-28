@@ -1,7 +1,9 @@
-import { interpolate } from "remotion";
+import { interpolate, Img, staticFile } from "remotion";
 import type { BarState, ChartData } from "../types";
 import { formatValue } from "../hooks/useAnimatedValue";
 import { LAYOUT } from "../hooks/useBarPositions";
+
+const LOGO_SIZE = 48; // px, Logo-Grösse (quadratisch)
 
 interface BarProps {
   bar: BarState;
@@ -36,6 +38,10 @@ export const Bar: React.FC<BarProps> = ({
 
   const formattedValue = formatValue(bar.currentValue, valueFormat);
   const barWidthPx = Math.max(bar.barWidth, 2);
+
+  // Logo sitzt am rechten Ende des Balkens (innerhalb wenn Platz, sonst daneben)
+  const logoLeft = LAYOUT.paddingLeft + barWidthPx - LOGO_SIZE / 2;
+  const showLogoInside = barWidthPx > LOGO_SIZE * 2;
 
   return (
     <div
@@ -101,7 +107,7 @@ export const Bar: React.FC<BarProps> = ({
       <div
         style={{
           position: "absolute",
-          left: LAYOUT.paddingLeft + barWidthPx + 14,
+          left: LAYOUT.paddingLeft + barWidthPx + (bar.imageUrl ? LOGO_SIZE / 2 + 10 : 14),
           top: 0,
           height: barHeight,
           display: "flex",
@@ -115,6 +121,40 @@ export const Bar: React.FC<BarProps> = ({
       >
         {formattedValue}
       </div>
+
+      {/* Logo am Balkenende */}
+      {bar.imageUrl && (
+        <div
+          style={{
+            position: "absolute",
+            left: logoLeft,
+            top: (barHeight - LOGO_SIZE) / 2,
+            width: LOGO_SIZE,
+            height: LOGO_SIZE,
+            borderRadius: "50%",
+            overflow: "hidden",
+            backgroundColor: showLogoInside ? "rgba(255,255,255,0.1)" : "#1e2736",
+            border: "2px solid rgba(255,255,255,0.2)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Img
+            src={
+              bar.imageUrl?.startsWith("http")
+                ? bar.imageUrl
+                : staticFile(bar.imageUrl!)
+            }
+            style={{
+              width: LOGO_SIZE - 8,
+              height: LOGO_SIZE - 8,
+              objectFit: "contain",
+              borderRadius: "50%",
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };

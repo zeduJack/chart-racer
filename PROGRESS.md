@@ -2,13 +2,13 @@
 
 ## Aktueller Status
 - **Phase:** 1 — Remotion Setup + Core Animation + Erstes Video
-- **Aktuelle Story:** 1.3 — Bilder/Logos an Balken
+- **Aktuelle Story:** 1.4 — Audio + Intro/Outro
 - **Status:** IN PROGRESS
 
 ## Phase 1: Remotion Setup + Core Animation + Erstes Video
 - [x] **1.1** Projekt-Setup (Next.js 16 + Remotion + Git + CLAUDE.md)
 - [x] **1.2** Bar Chart Race Kern-Animation (Balken, Reordering, Counter)
-- [ ] **1.3** Bilder/Logos an Balken
+- [x] **1.3** Bilder/Logos an Balken
 - [ ] **1.4** Audio + Intro/Outro
 - [ ] **1.5** Video-Rendering + CLI (erstes fertiges MP4)
 - [ ] **1.6** Visual Polish der Animation
