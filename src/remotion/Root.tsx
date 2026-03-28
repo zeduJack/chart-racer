@@ -1,8 +1,7 @@
 import { Composition } from "remotion";
-import { BarChartRace } from "./BarChartRace";
+import { BarChartRace, INTRO_DURATION, OUTRO_DURATION, computeRaceDuration } from "./BarChartRace";
 import { sampleData } from "@/lib/sample-data";
 import type { ChartRaceConfig } from "./types";
-
 
 // Frames pro Zeitschritt (bei 30fps = 2 Sekunden pro Jahr)
 const DURATION_PER_STEP = 60;
@@ -19,9 +18,9 @@ const defaultConfig: ChartRaceConfig = {
   style: defaultStyle,
 };
 
-// Gesamtdauer: (Anzahl Zeitschritte - 1) × Frames pro Schritt
-const durationInFrames =
-  (sampleData.timeLabels.length - 1) * DURATION_PER_STEP;
+// Gesamtdauer: Intro + Race + Outro
+const raceDuration = computeRaceDuration(sampleData.timeLabels, DURATION_PER_STEP);
+const durationInFrames = INTRO_DURATION + raceDuration + OUTRO_DURATION;
 
 export const RemotionRoot: React.FC = () => {
   return (
