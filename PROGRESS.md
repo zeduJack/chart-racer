@@ -2,7 +2,7 @@
 
 ## Aktueller Status
 - **Phase:** 4 — Polish, Templates & Deployment
-- **Aktuelle Story:** 4.2 — Social-Media Metadaten
+- **Aktuelle Story:** 4.3 — Multi-Format Rendering
 - **Status:** IN PROGRESS
 
 ## Phase 1: Remotion Setup + Core Animation + Erstes Video
@@ -28,7 +28,7 @@
 
 ## Phase 4: Polish, Templates & Deployment
 - [x] **4.1** Template-System
-- [ ] **4.2** Social-Media Metadaten
+- [x] **4.2** Social-Media Metadaten
 - [ ] **4.3** Multi-Format Rendering
 - [ ] **4.4** Dockerfile + CapRover Deployment
 - [ ] **4.5** Finales Visual Polish
@@ -59,3 +59,8 @@
 - `src/components/editor/TemplateSelector.tsx`: Template-Auswahl UI mit Farbpaletten-Vorschau
 - `src/components/editor/ConfigPanel.tsx`: Template-Selektor oben, Feineinstellungen darunter
 - `tests/e2e/templates.spec.ts`: 10/10 Tests grün
+- `src/app/layout.tsx`: vollständige OG/Twitter-Metadaten, metadataBase, lang="de"
+- `src/app/opengraph-image.tsx`: dynamisches OG-Bild via Next.js ImageResponse (edge runtime)
+- `src/app/editor/page.tsx` + `src/app/videos/page.tsx`: page-spezifische Metadata-Exports
+- `public/og-image.svg`: statisches Fallback-OG-Bild
+- `tests/visual/metadata.spec.ts`: 8/8 HTTP-Tests grün

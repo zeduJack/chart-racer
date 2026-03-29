@@ -1,4 +1,21 @@
+import type { Metadata } from "next";
 import { EditorTabs } from "@/components/editor/EditorTabs";
+
+export const metadata: Metadata = {
+  title: "Editor",
+  description:
+    "Erstelle Bar Chart Race Videos mit KI-Datenrecherche oder lade eigene CSV/JSON-Daten hoch.",
+  openGraph: {
+    title: "Video Editor · ChartRacer",
+    description:
+      "Erstelle Bar Chart Race Videos mit KI-Datenrecherche oder eigenen Daten.",
+  },
+  twitter: {
+    title: "Video Editor · ChartRacer",
+    description:
+      "Erstelle Bar Chart Race Videos mit KI-Datenrecherche oder eigenen Daten.",
+  },
+};
 
 export default function EditorPage() {
   return (

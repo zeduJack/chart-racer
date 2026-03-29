@@ -1,6 +1,20 @@
+import type { Metadata } from "next";
 import { listVideos, listTopics } from "@/lib/topic-manager";
 
 export const dynamic = "force-dynamic"; // Immer aktuell laden
+
+export const metadata: Metadata = {
+  title: "Video-Galerie",
+  description: "Alle generierten Bar Chart Race Videos — Status, Format und Render-Details auf einen Blick.",
+  openGraph: {
+    title: "Video-Galerie · ChartRacer",
+    description: "Alle generierten Bar Chart Race Videos — Status, Format und Render-Details.",
+  },
+  twitter: {
+    title: "Video-Galerie · ChartRacer",
+    description: "Alle generierten Bar Chart Race Videos — Status, Format und Render-Details.",
+  },
+};
 
 export default async function VideosPage() {
   let videos: Awaited<ReturnType<typeof listVideos>> = [];
