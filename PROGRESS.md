@@ -2,7 +2,7 @@
 
 ## Aktueller Status
 - **Phase:** 4 — Polish, Templates & Deployment
-- **Aktuelle Story:** 4.1 — Template-System
+- **Aktuelle Story:** 4.2 — Social-Media Metadaten
 - **Status:** IN PROGRESS
 
 ## Phase 1: Remotion Setup + Core Animation + Erstes Video
@@ -27,7 +27,7 @@
 - [x] **3.5** Video-Galerie + Dashboard
 
 ## Phase 4: Polish, Templates & Deployment
-- [ ] **4.1** Template-System
+- [x] **4.1** Template-System
 - [ ] **4.2** Social-Media Metadaten
 - [ ] **4.3** Multi-Format Rendering
 - [ ] **4.4** Dockerfile + CapRover Deployment
@@ -55,3 +55,7 @@
 - `tests/visual/animation-frames.spec.ts` — Remotion Stills für 5 Checkpoints (rendert via execSync)
 - `src/app/videos/page.tsx`: Server Component, force-dynamic, Stats, VideoCard, TopicCard, EmptyState
 - `tests/visual/videos-page.spec.ts`: 8/8 HTTP-Tests grün
+- `src/lib/templates.ts`: 5 Templates (Dynamic/Cinematic/Corporate/Minimal/Neon) mit style + palette
+- `src/components/editor/TemplateSelector.tsx`: Template-Auswahl UI mit Farbpaletten-Vorschau
+- `src/components/editor/ConfigPanel.tsx`: Template-Selektor oben, Feineinstellungen darunter
+- `tests/e2e/templates.spec.ts`: 10/10 Tests grün

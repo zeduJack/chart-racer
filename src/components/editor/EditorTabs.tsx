@@ -7,15 +7,12 @@ import { ConfigPanel } from "./ConfigPanel";
 import { ConfigurablePlayer } from "@/components/preview/ConfigurablePlayer";
 import type { ResearchResult } from "@/lib/ai-researcher";
 import type { ChartStyle } from "@/remotion/types";
+import { TEMPLATES, DEFAULT_TEMPLATE_ID } from "@/lib/templates";
 
 type Tab = "ai" | "upload";
 
-const DEFAULT_STYLE: ChartStyle = {
-  visibleBars: 10,
-  durationPerStep: 60,
-  barHeight: 48,
-  barGap: 10,
-};
+const defaultTemplate = TEMPLATES.find((t) => t.id === DEFAULT_TEMPLATE_ID)!;
+const DEFAULT_STYLE: ChartStyle = { ...defaultTemplate.style, templateId: DEFAULT_TEMPLATE_ID };
 
 export function EditorTabs() {
   const [tab, setTab] = useState<Tab>("ai");
@@ -134,7 +131,9 @@ export function EditorTabs() {
             <span>⚙️</span>
             <span className="font-medium">Animations-Konfiguration</span>
             <span className="text-xs text-white/30">
-              {style.visibleBars} Balken · {(style.durationPerStep / 30).toFixed(1)}s/Schritt
+              {style.templateId
+                ? TEMPLATES.find((t) => t.id === style.templateId)?.name + " · "
+                : ""}{style.visibleBars} Balken · {(style.durationPerStep / 30).toFixed(1)}s/Schritt
             </span>
           </span>
           <span className={`transition-transform ${configOpen ? "rotate-180" : ""}`}>▾</span>

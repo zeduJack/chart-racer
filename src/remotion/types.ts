@@ -22,6 +22,7 @@ export interface ChartStyle {
   durationPerStep: number; // Frames pro Zeitschritt
   barHeight: number;
   barGap: number;
+  templateId?: string; // Aktives Template (optional)
 }
 
 export interface ChartRaceConfig {
