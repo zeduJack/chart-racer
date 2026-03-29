@@ -2,7 +2,7 @@
 
 ## Aktueller Status
 - **Phase:** 3 — Web Editor UI
-- **Aktuelle Story:** 3.2 — Manueller Daten-Upload (CSV/JSON)
+- **Aktuelle Story:** 3.3 — Visuelles Konfigurations-Panel
 - **Status:** IN PROGRESS
 
 ## Phase 1: Remotion Setup + Core Animation + Erstes Video
@@ -21,7 +21,7 @@
 
 ## Phase 3: Web Editor UI
 - [x] **3.1** Editor-Seite mit AI-Themen-Input
-- [ ] **3.2** Manueller Daten-Upload (CSV/JSON)
+- [x] **3.2** Manueller Daten-Upload (CSV/JSON)
 - [ ] **3.3** Visuelles Konfigurations-Panel
 - [ ] **3.4** Remotion Player als Live-Preview
 - [ ] **3.5** Video-Galerie + Dashboard
