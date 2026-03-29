@@ -12,10 +12,10 @@
 - Committe PROGRESS.md zusammen mit dem Story-Commit
 
 ## Git
-- Nach jeder abgeschlossenen Story: `git add . && git commit -m "..."` mit aussagekräftiger Commit-Message
+- Nach jeder abgeschlossenen Story: `git add . && git commit -m "..." && git push` mit aussagekräftiger Commit-Message
 - Commit-Format: `feat(scope): beschreibung` / `fix(scope): beschreibung` / `chore(scope): beschreibung`
-- KEIN `git push` — das macht der User manuell
-- Bei grösseren Stories sind Zwischen-Commits erwünscht
+- Nach jedem Commit direkt pushen: `git push`
+- Bei grösseren Stories sind Zwischen-Commits (mit Push) erwünscht
 
 ## Tech-Stack
 - Next.js 16 (App Router, Turbopack, proxy.ts statt middleware.ts)
