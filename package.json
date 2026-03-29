@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --port 3003",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test": "npx playwright test",
+    "test:ui": "npx playwright test tests/visual/editor-ui.spec.ts",
+    "test:stills": "npx playwright test tests/visual/animation-frames.spec.ts",
     "remotion:studio": "npx remotion studio src/remotion/index.ts",
     "remotion:render": "npx remotion render src/remotion/index.ts BarChartRace",
     "remotion:still": "npx remotion still src/remotion/index.ts BarChartRace",
@@ -26,6 +29,7 @@
     "remotion": "4.0.441"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
     "@tailwindcss/postcss": "^4",
     "@types/d3": "^7.4.3",
     "@types/node": "^20",

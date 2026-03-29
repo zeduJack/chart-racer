@@ -5,6 +5,7 @@
       "Bash(npm *)",
       "Bash(npx *)",
       "Bash(node *)",
+      "Bash(node /Users/zedu/workarea/workspaces/chart-racer/*)",
       "Bash(git add *)",
       "Bash(git commit *)",
       "Bash(git status)",
@@ -23,7 +24,9 @@
       "Bash(tail *)",
       "Bash(wc *)",
       "Bash(echo *)",
-      "Bash(tree *)"
+      "Bash(tree *)",
+      "Bash(npx remotion *)",
+      "Bash(npx remotion still *)"
     ],
     "deny": [
       "Bash(rm -rf /)",

@@ -40,6 +40,10 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# playwright
+tests/results/
+tests/screenshots/
+
 # remotion output
 *.mp4
 *.webm

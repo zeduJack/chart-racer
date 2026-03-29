@@ -34,4 +34,7 @@
 - [ ] **4.5** Finales Visual Polish
 
 ## Notizen
-<!-- Hier Entscheidungen, Probleme, offene Fragen dokumentieren -->
+- Playwright installiert (`@playwright/test ^1.58.2`), 5 UI-Tests laufen durch (port 3003)
+- `tests/visual/editor-ui.spec.ts` — Dashboard UI: Navigation, Stats, Render-Commands, JS-Fehler, Screenshot
+- `tests/visual/animation-frames.spec.ts` — Remotion Stills für 5 Checkpoints (rendert via execSync)
+- Push-ready nach letztem Commit `chore(tests): ...`
