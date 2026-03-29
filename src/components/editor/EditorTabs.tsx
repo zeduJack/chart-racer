@@ -4,6 +4,7 @@ import { useState } from "react";
 import { GenerateForm } from "./GenerateForm";
 import { UploadForm } from "./UploadForm";
 import { ConfigPanel } from "./ConfigPanel";
+import { ConfigurablePlayer } from "@/components/preview/ConfigurablePlayer";
 import type { ResearchResult } from "@/lib/ai-researcher";
 import type { ChartStyle } from "@/remotion/types";
 
@@ -21,6 +22,8 @@ export function EditorTabs() {
   const [uploadedData, setUploadedData] = useState<ResearchResult | null>(null);
   const [style, setStyle] = useState<ChartStyle>(DEFAULT_STYLE);
   const [configOpen, setConfigOpen] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [format, setFormat] = useState<"16:9" | "9:16" | "1:1">("16:9");
 
   function handleDataParsed(data: ResearchResult) {
     setUploadedData(data);
@@ -79,6 +82,44 @@ export function EditorTabs() {
               </div>
             )}
           </>
+        )}
+      </div>
+
+      {/* Live-Preview */}
+      <div className="rounded-2xl border border-white/[0.06] overflow-hidden">
+        <button
+          type="button"
+          onClick={() => setPreviewOpen(!previewOpen)}
+          className="w-full flex items-center justify-between px-5 py-3 text-sm text-white/60 hover:text-white/80 hover:bg-white/[0.02] transition"
+        >
+          <span className="flex items-center gap-2">
+            <span>▶️</span>
+            <span className="font-medium">Live-Preview</span>
+            <span className="text-xs text-white/30">
+              {uploadedData ? uploadedData.title : "Beispiel-Daten"}
+            </span>
+          </span>
+          <span className={`transition-transform ${previewOpen ? "rotate-180" : ""}`}>▾</span>
+        </button>
+        {previewOpen && (
+          <div className="border-t border-white/[0.06] bg-black/30 p-4">
+            <div className="flex gap-2 mb-3">
+              <span className="text-xs text-white/40 flex items-center">Format:</span>
+              {(["16:9", "9:16", "1:1"] as const).map((f) => (
+                <button
+                  key={f}
+                  type="button"
+                  onClick={() => setFormat(f)}
+                  className={`px-2 py-1 rounded text-xs font-medium transition ${
+                    format === f ? "bg-sky-500 text-white" : "bg-white/[0.05] text-white/40 hover:bg-white/[0.08]"
+                  }`}
+                >
+                  {f}
+                </button>
+              ))}
+            </div>
+            <ConfigurablePlayer data={uploadedData} style={style} format={format} />
+          </div>
         )}
       </div>
 
