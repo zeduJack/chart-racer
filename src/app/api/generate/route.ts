@@ -1,20 +1,20 @@
 /**
  * POST /api/generate
- * Startet AI-Recherche + Video-Rendering (oder Dry-Run)
+ * Rendert ein Video aus bereits vorhandenen Daten — KEIN AI, KEIN API-Key nötig.
  *
- * Body: { topic: string, format?: string, resolution?: string, fps?: number, dryRun?: boolean }
- * Response: { videoId: number, status: string, data?: ResearchResult }
+ * Body: { data: ResearchResult, format?: string, resolution?: string, fps?: number, dryRun?: boolean }
+ * Response: { videoId: number, status: string, outputPath?: string, data: ResearchResult }
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { researchTopic } from "@/lib/ai-researcher";
-import { getPreviousAngles, saveAngle, createVideoJob, updateVideoStatus } from "@/lib/topic-manager";
+import { saveAngle, createVideoJob, updateVideoStatus } from "@/lib/topic-manager";
 import { renderVideo } from "@/lib/render";
 import type { OutputFormat, Resolution } from "@/lib/render";
+import type { ResearchResult } from "@/lib/ai-researcher";
 
 export async function POST(req: NextRequest) {
   let body: {
-    topic?: string;
+    data?: ResearchResult;
     format?: string;
     resolution?: string;
     fps?: number;
@@ -27,41 +27,33 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Ungültiges JSON im Request-Body" }, { status: 400 });
   }
 
-  const { topic, format = "16:9", resolution = "1080p", fps = 30, dryRun = false } = body;
+  const { data, format = "16:9", resolution = "1080p", fps = 30, dryRun = false } = body;
 
-  if (!topic?.trim()) {
-    return NextResponse.json({ error: "topic ist erforderlich" }, { status: 400 });
-  }
-
-  if (!process.env.ANTHROPIC_API_KEY) {
+  if (!data || !data.participants || !data.timeLabels) {
     return NextResponse.json(
-      { error: "ANTHROPIC_API_KEY nicht konfiguriert" },
-      { status: 500 }
+      { error: "data mit participants und timeLabels ist erforderlich" },
+      { status: 400 }
     );
   }
 
   try {
-    // 1. Blickwinkel-History laden
-    const previousAngles = await getPreviousAngles(topic);
+    // Sicherstellen dass angle gesetzt ist (bei manuell hochgeladenen Daten fehlt es)
+    const dataWithAngle: ResearchResult = {
+      angle: "Eigene Daten",
+      timeUnit: "year",
+      socialMedia: undefined,
+      ...data,
+    };
 
-    // 2. AI-Recherche
-    const result = await researchTopic(topic, previousAngles);
-
-    // 3. In DB speichern
-    const angleId = await saveAngle(topic, result);
-    const videoId = await createVideoJob(angleId, result, format, resolution, fps);
+    // In DB speichern (Titel als Topic-Name)
+    const angleId = await saveAngle(dataWithAngle.title || "upload", dataWithAngle);
+    const videoId = await createVideoJob(angleId, data, format, resolution, fps);
 
     if (dryRun) {
       await updateVideoStatus(videoId, "failed", { errorMessage: "dry-run" });
-      return NextResponse.json({
-        videoId,
-        status: "dry-run",
-        data: result,
-      });
+      return NextResponse.json({ videoId, status: "dry-run", data: dataWithAngle });
     }
 
-    // 4. Rendering (async im Background — für Production würde man hier eine Queue nutzen)
-    // Im MVP: synchrones Rendering (kann dauern)
     await updateVideoStatus(videoId, "rendering");
 
     try {
@@ -69,17 +61,12 @@ export async function POST(req: NextRequest) {
         format: format as OutputFormat,
         resolution: resolution as Resolution,
         fps: fps as 30 | 60,
-        props: { data: result },
+        props: { data: dataWithAngle },
       });
 
       await updateVideoStatus(videoId, "done", { outputPath });
 
-      return NextResponse.json({
-        videoId,
-        status: "done",
-        outputPath,
-        data: result,
-      });
+      return NextResponse.json({ videoId, status: "done", outputPath, data: dataWithAngle });
     } catch (renderErr) {
       const msg = renderErr instanceof Error ? renderErr.message : String(renderErr);
       await updateVideoStatus(videoId, "failed", { errorMessage: msg });
@@ -92,5 +79,5 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET() {
-  return NextResponse.json({ message: "POST /api/generate mit { topic: string }" });
+  return NextResponse.json({ message: "POST /api/generate mit { data: ResearchResult }" });
 }

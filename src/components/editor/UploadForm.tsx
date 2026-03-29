@@ -217,7 +217,7 @@ export function UploadForm({ onDataParsed }: UploadFormProps) {
             onClick={handleUse}
             className="w-full py-2.5 rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold text-sm hover:opacity-90 transition"
           >
-            Diese Daten verwenden →
+            Diese Daten für Preview verwenden →
           </button>
         </div>
       )}

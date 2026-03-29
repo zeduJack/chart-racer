@@ -30,21 +30,45 @@ export function GenerateForm() {
     setResult(null);
 
     try {
-      const res = await fetch("/api/generate", {
+      // Schritt 1: KI-Recherche
+      const researchRes = await fetch("/api/research", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic, format, dryRun }),
+        body: JSON.stringify({ topic }),
       });
 
-      const data = await res.json();
+      const researchJson = await researchRes.json();
 
-      if (!res.ok) {
-        setError(data.error || "Unbekannter Fehler");
+      if (!researchRes.ok) {
+        setError(researchJson.error || "Recherche fehlgeschlagen");
         setStatus("error");
         return;
       }
 
-      setResult(data);
+      if (dryRun) {
+        setResult({ videoId: 0, status: "dry-run", data: researchJson.data });
+        setStatus("done");
+        return;
+      }
+
+      // Schritt 2: Video rendern mit recherchierten Daten
+      setStatus("rendering");
+
+      const generateRes = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ data: researchJson.data, format }),
+      });
+
+      const generateJson = await generateRes.json();
+
+      if (!generateRes.ok) {
+        setError(generateJson.error || "Rendering fehlgeschlagen");
+        setStatus("error");
+        return;
+      }
+
+      setResult(generateJson);
       setStatus("done");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Netzwerkfehler");
