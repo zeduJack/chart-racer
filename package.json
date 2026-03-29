@@ -13,10 +13,10 @@
     "remotion:studio": "npx remotion studio src/remotion/index.ts",
     "remotion:render": "npx remotion render src/remotion/index.ts BarChartRace",
     "remotion:still": "npx remotion still src/remotion/index.ts BarChartRace",
-    "chart-racer": "npx ts-node --project tsconfig.json src/cli/index.ts",
-    "render": "npx ts-node --project tsconfig.json src/cli/index.ts render",
-    "render:reels": "npx ts-node --project tsconfig.json src/cli/index.ts render --format 9:16",
-    "render:square": "npx ts-node --project tsconfig.json src/cli/index.ts render --format 1:1"
+    "chart-racer": "npx tsx src/cli/index.ts",
+    "render": "npx tsx src/cli/index.ts render",
+    "render:reels": "npx tsx src/cli/index.ts render --format 9:16",
+    "render:square": "npx tsx src/cli/index.ts render --format 1:1"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.80.0",
@@ -44,6 +44,7 @@
     "eslint-config-next": "16.2.1",
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }
