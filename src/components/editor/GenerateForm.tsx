@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { ResearchResult } from "@/lib/ai-researcher";
 
 type Status = "idle" | "researching" | "rendering" | "done" | "error";
@@ -13,6 +13,27 @@ interface GenerateResult {
   error?: string;
 }
 
+const STORAGE_KEY = "chartRacer_lastResearch";
+
+function saveToStorage(result: GenerateResult) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ result, savedAt: Date.now() }));
+  } catch {
+    // localStorage nicht verfügbar (z.B. private mode)
+  }
+}
+
+function loadFromStorage(): GenerateResult | null {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const { result } = JSON.parse(raw) as { result: GenerateResult; savedAt: number };
+    return result;
+  } catch {
+    return null;
+  }
+}
+
 export function GenerateForm() {
   const [topic, setTopic] = useState("");
   const [format, setFormat] = useState<"16:9" | "9:16" | "1:1">("16:9");
@@ -20,6 +41,15 @@ export function GenerateForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [result, setResult] = useState<GenerateResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  // Letztes Ergebnis beim Mount wiederherstellen
+  useEffect(() => {
+    const saved = loadFromStorage();
+    if (saved) {
+      setResult(saved);
+      setStatus("done");
+    }
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -46,7 +76,9 @@ export function GenerateForm() {
       }
 
       if (dryRun) {
-        setResult({ videoId: 0, status: "dry-run", data: researchJson.data });
+        const dryResult = { videoId: 0, status: "dry-run", data: researchJson.data };
+        setResult(dryResult);
+        saveToStorage(dryResult);
         setStatus("done");
         return;
       }
@@ -69,6 +101,7 @@ export function GenerateForm() {
       }
 
       setResult(generateJson);
+      saveToStorage(generateJson);
       setStatus("done");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Netzwerkfehler");
@@ -159,13 +192,21 @@ export function GenerateForm() {
 
       {/* Result */}
       {status === "done" && result && (
-        <ResultCard result={result} dryRun={dryRun} />
+        <ResultCard
+          result={result}
+          dryRun={result.status === "dry-run"}
+          onClear={() => {
+            setResult(null);
+            setStatus("idle");
+            try { localStorage.removeItem(STORAGE_KEY); } catch { /* ignore */ }
+          }}
+        />
       )}
     </div>
   );
 }
 
-function ResultCard({ result, dryRun }: { result: GenerateResult; dryRun: boolean }) {
+function ResultCard({ result, dryRun, onClear }: { result: GenerateResult; dryRun: boolean; onClear: () => void }) {
   const data = result.data;
 
   return (
@@ -175,7 +216,16 @@ function ResultCard({ result, dryRun }: { result: GenerateResult; dryRun: boolea
         <span className="text-sm font-semibold text-green-300">
           {dryRun ? "Daten recherchiert" : "Video fertig!"}
         </span>
-        <span className="ml-auto text-xs text-white/30">Job #{result.videoId}</span>
+        <span className="ml-auto flex items-center gap-3">
+          <span className="text-xs text-white/30">Job #{result.videoId}</span>
+          <button
+            onClick={onClear}
+            className="text-xs text-white/30 hover:text-white/60 transition"
+            title="Ergebnis verwerfen"
+          >
+            ✕
+          </button>
+        </span>
       </div>
 
       {data && (

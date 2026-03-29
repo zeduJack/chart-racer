@@ -28,6 +28,18 @@ export const angles = sqliteTable("angles", {
     .default(sql`(datetime('now'))`),
 });
 
+// Gespeicherte Recherche-Ergebnisse (vollständige ResearchResult-Daten)
+export const researchResults = sqliteTable("research_results", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  topic: text("topic").notNull(),
+  title: text("title").notNull(),
+  angle: text("angle").notNull(),
+  researchDataJson: text("research_data_json").notNull(),
+  createdAt: text("created_at")
+    .notNull()
+    .default(sql`(datetime('now'))`),
+});
+
 // Generierte Videos
 export const generatedVideos = sqliteTable("generated_videos", {
   id: integer("id").primaryKey({ autoIncrement: true }),

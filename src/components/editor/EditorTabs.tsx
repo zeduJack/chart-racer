@@ -4,12 +4,13 @@ import { useState } from "react";
 import { GenerateForm } from "./GenerateForm";
 import { UploadForm } from "./UploadForm";
 import { ConfigPanel } from "./ConfigPanel";
+import { ResearchHistory } from "./ResearchHistory";
 import { ConfigurablePlayer } from "@/components/preview/ConfigurablePlayer";
 import type { ResearchResult } from "@/lib/ai-researcher";
 import type { ChartStyle } from "@/remotion/types";
 import { TEMPLATES, DEFAULT_TEMPLATE_ID } from "@/lib/templates";
 
-type Tab = "ai" | "upload";
+type Tab = "ai" | "upload" | "saved";
 
 const defaultTemplate = TEMPLATES.find((t) => t.id === DEFAULT_TEMPLATE_ID)!;
 const DEFAULT_STYLE: ChartStyle = { ...defaultTemplate.style, templateId: DEFAULT_TEMPLATE_ID };
@@ -36,6 +37,9 @@ export function EditorTabs() {
         <TabButton active={tab === "upload"} onClick={() => setTab("upload")}>
           📂 Eigene Daten
         </TabButton>
+        <TabButton active={tab === "saved"} onClick={() => setTab("saved")}>
+          💾 Gespeichert
+        </TabButton>
       </div>
 
       {/* Tab Content */}
@@ -59,6 +63,21 @@ export function EditorTabs() {
                 </div>
               </div>
             </div>
+          </>
+        )}
+
+        {tab === "saved" && (
+          <>
+            <div className="mb-5">
+              <h2 className="text-base font-semibold mb-1">Gespeicherte Recherchen</h2>
+              <p className="text-sm text-white/40">
+                Alle KI-Recherchen werden hier dauerhaft gespeichert — mit Zeitstempel und Thema.
+              </p>
+            </div>
+            <ResearchHistory onLoad={(data) => {
+              setUploadedData(data);
+              setTab("upload");
+            }} />
           </>
         )}
 
@@ -146,6 +165,14 @@ export function EditorTabs() {
       </div>
 
       {/* Info-Cards */}
+      {tab === "saved" && (
+        <div className="grid grid-cols-3 gap-3">
+          <InfoCard icon="💾" title="Automatisch gespeichert" text="Jede KI-Recherche wird sofort in der Datenbank gespeichert" />
+          <InfoCard icon="📅" title="Zeitstempel" text="Datum und Uhrzeit jeder Recherche werden festgehalten" />
+          <InfoCard icon="▶️" title="In Preview laden" text="Klicke 'In Preview laden' um die Daten direkt zu visualisieren" />
+        </div>
+      )}
+
       {tab === "ai" && (
         <div className="grid grid-cols-3 gap-3">
           <InfoCard icon="🔍" title="KI-Recherche" text="Claude sucht automatisch passende Daten via Web Search" />

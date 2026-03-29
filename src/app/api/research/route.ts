@@ -9,7 +9,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { researchTopic } from "@/lib/ai-researcher";
-import { getPreviousAngles, saveAngle } from "@/lib/topic-manager";
+import { getPreviousAngles, saveAngle, saveResearchResult, listResearchResults, deleteResearchResult } from "@/lib/topic-manager";
 
 export async function POST(req: NextRequest) {
   let body: { topic?: string };
@@ -36,7 +36,10 @@ export async function POST(req: NextRequest) {
   try {
     const previousAngles = await getPreviousAngles(topic);
     const result = await researchTopic(topic, previousAngles);
-    await saveAngle(topic, result);
+    await Promise.all([
+      saveAngle(topic, result),
+      saveResearchResult(topic, result),
+    ]);
 
     return NextResponse.json({ data: result });
   } catch (err) {
@@ -46,5 +49,24 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET() {
-  return NextResponse.json({ message: "POST /api/research mit { topic: string }" });
+  try {
+    const results = await listResearchResults();
+    return NextResponse.json({ results });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    return NextResponse.json({ error: msg }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const id = parseInt(searchParams.get("id") ?? "", 10);
+  if (isNaN(id)) return NextResponse.json({ error: "id fehlt" }, { status: 400 });
+  try {
+    await deleteResearchResult(id);
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    return NextResponse.json({ error: msg }, { status: 500 });
+  }
 }

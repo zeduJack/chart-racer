@@ -4,8 +4,8 @@
  */
 
 import { getDb } from "./db/index";
-import { topics, angles, generatedVideos } from "./db/schema";
-import { eq } from "drizzle-orm";
+import { topics, angles, generatedVideos, researchResults } from "./db/schema";
+import { eq, desc } from "drizzle-orm";
 import type { ResearchResult } from "./ai-researcher";
 
 /**
@@ -57,6 +57,52 @@ export async function saveAngle(
     .returning();
 
   return angle.id;
+}
+
+/**
+ * Speichert ein vollständiges Recherche-Ergebnis dauerhaft
+ */
+export async function saveResearchResult(
+  topic: string,
+  result: ResearchResult
+): Promise<number> {
+  const db = getDb();
+  const [row] = await db
+    .insert(researchResults)
+    .values({
+      topic: topic.trim(),
+      title: result.title,
+      angle: result.angle,
+      researchDataJson: JSON.stringify(result),
+    })
+    .returning();
+  return row.id;
+}
+
+/**
+ * Gibt alle gespeicherten Recherche-Ergebnisse zurück, neueste zuerst
+ */
+export async function listResearchResults() {
+  const db = getDb();
+  return db
+    .select({
+      id: researchResults.id,
+      topic: researchResults.topic,
+      title: researchResults.title,
+      angle: researchResults.angle,
+      researchDataJson: researchResults.researchDataJson,
+      createdAt: researchResults.createdAt,
+    })
+    .from(researchResults)
+    .orderBy(desc(researchResults.createdAt));
+}
+
+/**
+ * Löscht ein gespeichertes Recherche-Ergebnis
+ */
+export async function deleteResearchResult(id: number): Promise<void> {
+  const db = getDb();
+  await db.delete(researchResults).where(eq(researchResults.id, id));
 }
 
 /**

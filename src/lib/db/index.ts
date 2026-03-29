@@ -41,6 +41,15 @@ export function initDb() {
       created_at TEXT NOT NULL DEFAULT (datetime('now'))
     );
 
+    CREATE TABLE IF NOT EXISTS research_results (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      topic TEXT NOT NULL,
+      title TEXT NOT NULL,
+      angle TEXT NOT NULL,
+      research_data_json TEXT NOT NULL,
+      created_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+
     CREATE TABLE IF NOT EXISTS generated_videos (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       angle_id INTEGER NOT NULL REFERENCES angles(id),
