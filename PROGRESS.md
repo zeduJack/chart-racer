@@ -1,8 +1,8 @@
 # ChartRacer — Fortschritt
 
 ## Aktueller Status
-- **Phase:** 3 — Web Editor UI
-- **Aktuelle Story:** 3.5 — Video-Galerie + Dashboard
+- **Phase:** 4 — Polish, Templates & Deployment
+- **Aktuelle Story:** 4.1 — Template-System
 - **Status:** IN PROGRESS
 
 ## Phase 1: Remotion Setup + Core Animation + Erstes Video
@@ -24,7 +24,7 @@
 - [x] **3.2** Manueller Daten-Upload (CSV/JSON)
 - [x] **3.3** Visuelles Konfigurations-Panel
 - [x] **3.4** Remotion Player als Live-Preview
-- [ ] **3.5** Video-Galerie + Dashboard
+- [x] **3.5** Video-Galerie + Dashboard
 
 ## Phase 4: Polish, Templates & Deployment
 - [ ] **4.1** Template-System
@@ -53,4 +53,5 @@
 - Playwright Browser-Tests: HTTP-Request-basiert (libnspr4 nicht auf Server installiert)
 - `tests/visual/editor-ui.spec.ts` — Dashboard UI: Navigation, Stats, Render-Commands, JS-Fehler, Screenshot
 - `tests/visual/animation-frames.spec.ts` — Remotion Stills für 5 Checkpoints (rendert via execSync)
-- Push-ready nach letztem Commit `chore(tests): ...`
+- `src/app/videos/page.tsx`: Server Component, force-dynamic, Stats, VideoCard, TopicCard, EmptyState
+- `tests/visual/videos-page.spec.ts`: 8/8 HTTP-Tests grün
