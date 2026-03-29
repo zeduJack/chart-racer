@@ -2,7 +2,7 @@
 
 ## Aktueller Status
 - **Phase:** 2 — AI-Datenrecherche
-- **Aktuelle Story:** 2.3 — Daten-Validierung und Fallback-Logik
+- **Aktuelle Story:** 2.4 — CLI + API für AI-generierte Videos
 - **Status:** IN PROGRESS
 
 ## Phase 1: Remotion Setup + Core Animation + Erstes Video
@@ -16,7 +16,7 @@
 ## Phase 2: AI-Datenrecherche
 - [x] **2.1** Claude API Integration mit Web Search Tool
 - [x] **2.2** Themen-History und Blickwinkel-Tracking (SQLite)
-- [ ] **2.3** Daten-Validierung und Fallback-Logik
+- [x] **2.3** Daten-Validierung und Fallback-Logik
 - [ ] **2.4** CLI + API für AI-generierte Videos
 
 ## Phase 3: Web Editor UI

@@ -4,6 +4,7 @@
  */
 
 import Anthropic from "@anthropic-ai/sdk";
+import { validateAndRepair, buildRetryHint } from "./data-validator";
 
 export interface ResearchedParticipant {
   name: string;
@@ -76,7 +77,8 @@ Antworte NUR mit dem JSON-Objekt (kein Markdown, kein Text darum):
 
 export async function researchTopic(
   topic: string,
-  previousAngles: string[] = []
+  previousAngles: string[] = [],
+  maxRetries: number = 2
 ): Promise<ResearchResult> {
   const client = new Anthropic({
     apiKey: process.env.ANTHROPIC_API_KEY,
@@ -178,13 +180,24 @@ Bitte recherchiere passende Daten und liefere ein vollständiges JSON zurück.`;
     );
   }
 
-  // Basis-Validierung
-  if (!parsed.participants || parsed.participants.length < 2) {
-    throw new Error("Zu wenige Teilnehmer in den recherchierten Daten");
-  }
-  if (!parsed.timeLabels || parsed.timeLabels.length < 2) {
-    throw new Error("Zu wenige Zeitpunkte in den recherchierten Daten");
+  // Validierung und Reparatur
+  const validation = validateAndRepair(parsed);
+
+  if (!validation.valid) {
+    // Retry mit Hinweis falls noch Versuche übrig
+    if (maxRetries > 0) {
+      const hint = buildRetryHint(validation.errors, validation.warnings);
+      console.warn(`AI-Recherche unvollständig, Retry (${maxRetries} übrig):\n${hint}`);
+      return researchTopic(topic, previousAngles, maxRetries - 1);
+    }
+    throw new Error(
+      `AI-Recherche nach allen Versuchen unvollständig:\n${validation.errors.join("\n")}`
+    );
   }
 
-  return parsed;
+  if (validation.warnings.length > 0) {
+    console.warn("AI-Recherche Warnungen:", validation.warnings.join("; "));
+  }
+
+  return validation.data!;
 }
