@@ -1,5 +1,5 @@
 import { scaleLinear } from "d3-scale";
-import { LAYOUT } from "../hooks/useBarPositions";
+import { useLayout } from "../hooks/useBarPositions";
 import { formatValue } from "../hooks/useAnimatedValue";
 import type { ChartData } from "../types";
 
@@ -18,17 +18,19 @@ export const ValueAxis: React.FC<ValueAxisProps> = ({
   barsEndY,
   valueFormat,
 }) => {
+  const layout = useLayout();
   const xScale = scaleLinear().domain([0, maxValue]).range([0, maxBarWidth]);
   const ticks = xScale.ticks(TICK_COUNT);
+  const tickFontSize = Math.round(16 * layout.scale);
 
   return (
     <div
       style={{
         position: "absolute",
-        left: LAYOUT.paddingLeft,
+        left: layout.paddingLeft,
         top: 0,
         width: maxBarWidth,
-        height: LAYOUT.canvasHeight,
+        height: layout.canvasHeight,
         pointerEvents: "none",
         zIndex: 200, // Über allen Balken
       }}
@@ -42,9 +44,9 @@ export const ValueAxis: React.FC<ValueAxisProps> = ({
               style={{
                 position: "absolute",
                 left: x,
-                top: LAYOUT.paddingTop - 10,
+                top: layout.paddingTop - 10,
                 width: 1,
-                height: barsEndY - LAYOUT.paddingTop + 10,
+                height: barsEndY - layout.paddingTop + 10,
                 backgroundColor: "rgba(255,255,255,0.06)",
               }}
             />
@@ -56,7 +58,7 @@ export const ValueAxis: React.FC<ValueAxisProps> = ({
                 top: barsEndY + 14,
                 transform: "translateX(-50%)",
                 color: "rgba(255,255,255,0.35)",
-                fontSize: 16,
+                fontSize: tickFontSize,
                 fontFamily: "'Inter', 'Helvetica Neue', sans-serif",
                 whiteSpace: "nowrap",
               }}

@@ -1,18 +1,46 @@
-import { useCurrentFrame, Easing } from "remotion";
+import { useCurrentFrame, useVideoConfig, Easing } from "remotion";
 import { scaleLinear } from "d3-scale";
 import type { ChartData, ChartStyle, BarState } from "../types";
 
-// Layout-Konstanten (1920×1080)
-export const LAYOUT = {
-  canvasWidth: 1920,
-  canvasHeight: 1080,
-  paddingLeft: 300,
-  paddingRight: 100,
-  paddingTop: 160,
-  paddingBottom: 100,
-} as const;
+// Layout-Berechnung basierend auf tatsächlicher Kompositions-Grösse
+export interface Layout {
+  canvasWidth: number;
+  canvasHeight: number;
+  paddingLeft: number;
+  paddingRight: number;
+  paddingTop: number;
+  paddingBottom: number;
+  scale: number; // Skalierungsfaktor für Schriften/Abstände
+}
 
-export type Layout = typeof LAYOUT;
+export function computeLayout(width: number, height: number): Layout {
+  // Referenz: 1920×1080 (16:9)
+  // Für andere Formate skalieren wir proportional
+  const scaleX = width / 1920;
+  const scaleY = height / 1080;
+  const scale = Math.min(scaleX, scaleY);
+
+  return {
+    canvasWidth: width,
+    canvasHeight: height,
+    paddingLeft: Math.round(300 * scaleX),
+    paddingRight: Math.round(100 * scaleX),
+    paddingTop: Math.round(160 * scaleY),
+    paddingBottom: Math.round(100 * scaleY),
+    scale,
+  };
+}
+
+// Statische Konstante für Backward-Kompatibilität (16:9 Standard)
+export const LAYOUT = computeLayout(1920, 1080);
+
+// Hook: gibt Layout für aktuelle Komposition zurück
+export function useLayout(): Layout {
+  const { width, height } = useVideoConfig();
+  return computeLayout(width, height);
+}
+
+export type { Layout as LayoutType };
 
 interface UseBarPositionsResult {
   bars: BarState[];
@@ -22,6 +50,7 @@ interface UseBarPositionsResult {
   nextLabel: string;
   maxValue: number;
   maxBarWidth: number;
+  layout: Layout;
 }
 
 export function useBarPositions(
@@ -29,8 +58,9 @@ export function useBarPositions(
   style: ChartStyle
 ): UseBarPositionsResult {
   const frame = useCurrentFrame();
+  const layout = useLayout();
 
-  const maxBarWidth = LAYOUT.canvasWidth - LAYOUT.paddingLeft - LAYOUT.paddingRight;
+  const maxBarWidth = layout.canvasWidth - layout.paddingLeft - layout.paddingRight;
   const totalSteps = data.timeLabels.length;
 
   // Aktueller Schritt und Fortschritt innerhalb des Schritts
@@ -77,8 +107,8 @@ export function useBarPositions(
     const fromRank = fromRanks[i];
     const toRank = toRanks[i];
 
-    const fromY = fromRank * slotHeight + LAYOUT.paddingTop;
-    const toY = toRank * slotHeight + LAYOUT.paddingTop;
+    const fromY = fromRank * slotHeight + layout.paddingTop;
+    const toY = toRank * slotHeight + layout.paddingTop;
 
     const fromWidth = xScale(fromValues[i]);
     const toWidth = xScale(toValues[i]);
@@ -119,5 +149,6 @@ export function useBarPositions(
     nextLabel: data.timeLabels[toStep],
     maxValue,
     maxBarWidth,
+    layout,
   };
 }

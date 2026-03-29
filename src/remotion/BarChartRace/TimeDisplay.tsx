@@ -1,5 +1,5 @@
 import { interpolate } from "remotion";
-import { LAYOUT } from "../hooks/useBarPositions";
+import { useLayout } from "../hooks/useBarPositions";
 
 interface TimeDisplayProps {
   currentLabel: string;
@@ -12,6 +12,8 @@ export const TimeDisplay: React.FC<TimeDisplayProps> = ({
   nextLabel,
   stepProgress,
 }) => {
+  const layout = useLayout();
+
   // Label wechselt bei 70% des Schritts
   const showNext = stepProgress > 0.7;
   const label = showNext ? nextLabel : currentLabel;
@@ -23,14 +25,16 @@ export const TimeDisplay: React.FC<TimeDisplayProps> = ({
   });
   const scale = showNext ? 1 + flipProgress * 0.03 : 1 - flipProgress * 0.03;
 
+  const fontSize = Math.round(180 * layout.scale);
+
   return (
     <div
       style={{
         position: "absolute",
-        bottom: LAYOUT.paddingBottom + 10,
-        right: LAYOUT.paddingRight,
+        bottom: layout.paddingBottom + 10,
+        right: layout.paddingRight,
         color: "rgba(255,255,255,0.18)",
-        fontSize: 180,
+        fontSize,
         fontWeight: 800,
         fontFamily: "'Inter', 'Helvetica Neue', sans-serif",
         lineHeight: 1,

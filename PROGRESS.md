@@ -2,7 +2,7 @@
 
 ## Aktueller Status
 - **Phase:** 4 — Polish, Templates & Deployment
-- **Aktuelle Story:** 4.3 — Multi-Format Rendering
+- **Aktuelle Story:** 4.4 — Dockerfile + CapRover Deployment
 - **Status:** IN PROGRESS
 
 ## Phase 1: Remotion Setup + Core Animation + Erstes Video
@@ -29,7 +29,7 @@
 ## Phase 4: Polish, Templates & Deployment
 - [x] **4.1** Template-System
 - [x] **4.2** Social-Media Metadaten
-- [ ] **4.3** Multi-Format Rendering
+- [x] **4.3** Multi-Format Rendering
 - [ ] **4.4** Dockerfile + CapRover Deployment
 - [ ] **4.5** Finales Visual Polish
 
@@ -64,3 +64,7 @@
 - `src/app/editor/page.tsx` + `src/app/videos/page.tsx`: page-spezifische Metadata-Exports
 - `public/og-image.svg`: statisches Fallback-OG-Bild
 - `tests/visual/metadata.spec.ts`: 8/8 HTTP-Tests grün
+- `computeLayout(w, h)` + `useLayout()` Hook für responsive Remotion-Dimensionen
+- Alle Remotion-Komponenten (Bar, TimeDisplay, ValueAxis, ProgressBar, RaceAnimation) nutzen dynamisches Layout
+- Root.tsx: 3 Kompositionen (16:9, 9:16, 1:1)
+- `tests/e2e/multi-format.spec.ts`: 8/8 Tests grün

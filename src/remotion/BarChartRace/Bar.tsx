@@ -1,9 +1,7 @@
 import { interpolate, Img, staticFile } from "remotion";
 import type { BarState, ChartData } from "../types";
 import { formatValue } from "../hooks/useAnimatedValue";
-import { LAYOUT } from "../hooks/useBarPositions";
-
-const LOGO_SIZE = 48; // px, Logo-Grösse (quadratisch)
+import { useLayout } from "../hooks/useBarPositions";
 
 interface BarProps {
   bar: BarState;
@@ -20,6 +18,13 @@ export const Bar: React.FC<BarProps> = ({
   valueFormat,
   maxRank,
 }) => {
+  const layout = useLayout();
+  const LOGO_SIZE = Math.round(48 * layout.scale);
+  const rankWidth = Math.round(52 * layout.scale);
+  const labelFontSize = Math.round(21 * layout.scale);
+  const rankFontSize = Math.round(15 * layout.scale);
+  const valueFontSize = Math.round(18 * layout.scale);
+
   // Höherer Rang = niedrigerer z-index (Rank 0 = oben, hat höchsten z-index)
   const zIndex = maxRank - Math.round(bar.interpolatedRank);
   // Opacity: einblenden wenn entering, ausblenden wenn leaving
@@ -40,7 +45,7 @@ export const Bar: React.FC<BarProps> = ({
   const barWidthPx = Math.max(bar.barWidth, 2);
 
   // Logo sitzt am rechten Ende des Balkens (innerhalb wenn Platz, sonst daneben)
-  const logoLeft = LAYOUT.paddingLeft + barWidthPx - LOGO_SIZE / 2;
+  const logoLeft = layout.paddingLeft + barWidthPx - LOGO_SIZE / 2;
   const showLogoInside = barWidthPx > LOGO_SIZE * 2;
 
   return (
@@ -60,7 +65,7 @@ export const Bar: React.FC<BarProps> = ({
         style={{
           position: "absolute",
           left: 0,
-          width: LAYOUT.paddingLeft - 8,
+          width: layout.paddingLeft - 8,
           height: barHeight,
           backgroundColor: "#0d1117",
         }}
@@ -70,13 +75,13 @@ export const Bar: React.FC<BarProps> = ({
         style={{
           position: "absolute",
           left: 0,
-          width: 52,
+          width: rankWidth,
           height: barHeight,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           color: "rgba(255,255,255,0.2)",
-          fontSize: 15,
+          fontSize: rankFontSize,
           fontWeight: 700,
           fontFamily: "'Inter', 'Helvetica Neue', sans-serif",
         }}
@@ -88,15 +93,15 @@ export const Bar: React.FC<BarProps> = ({
       <div
         style={{
           position: "absolute",
-          left: 52,
-          width: LAYOUT.paddingLeft - 52 - 16,
+          left: rankWidth,
+          width: layout.paddingLeft - rankWidth - 16,
           height: barHeight,
           display: "flex",
           alignItems: "center",
           justifyContent: "flex-end",
           paddingRight: 16,
           color: "rgba(255,255,255,0.92)",
-          fontSize: 21,
+          fontSize: labelFontSize,
           fontWeight: 600,
           fontFamily: "'Inter', 'Helvetica Neue', sans-serif",
           letterSpacing: "-0.3px",
@@ -111,7 +116,7 @@ export const Bar: React.FC<BarProps> = ({
       <div
         style={{
           position: "absolute",
-          left: LAYOUT.paddingLeft,
+          left: layout.paddingLeft,
           top: 0,
           width: barWidthPx,
           height: barHeight,
@@ -124,7 +129,7 @@ export const Bar: React.FC<BarProps> = ({
       <div
         style={{
           position: "absolute",
-          left: LAYOUT.paddingLeft,
+          left: layout.paddingLeft,
           top: 0,
           width: barWidthPx,
           height: Math.floor(barHeight * 0.45),
@@ -138,13 +143,13 @@ export const Bar: React.FC<BarProps> = ({
       <div
         style={{
           position: "absolute",
-          left: LAYOUT.paddingLeft + barWidthPx + (bar.imageUrl ? LOGO_SIZE / 2 + 10 : 14),
+          left: layout.paddingLeft + barWidthPx + (bar.imageUrl ? LOGO_SIZE / 2 + 10 : 14),
           top: 0,
           height: barHeight,
           display: "flex",
           alignItems: "center",
           color: "rgba(255,255,255,0.75)",
-          fontSize: 18,
+          fontSize: valueFontSize,
           fontWeight: 500,
           fontFamily: "'Inter', 'Helvetica Neue', sans-serif",
           whiteSpace: "nowrap",

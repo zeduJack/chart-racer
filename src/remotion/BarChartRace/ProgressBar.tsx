@@ -1,4 +1,4 @@
-import { useCurrentFrame, useVideoConfig, interpolate } from "remotion";
+import { useCurrentFrame, useVideoConfig } from "remotion";
 
 interface ProgressBarProps {
   totalFrames: number;
@@ -6,9 +6,10 @@ interface ProgressBarProps {
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({ totalFrames }) => {
   const frame = useCurrentFrame();
+  const { width } = useVideoConfig();
 
   const progress = Math.min(frame / totalFrames, 1);
-  const barWidth = progress * 1920;
+  const barWidth = progress * width;
 
   return (
     <div

@@ -1,6 +1,5 @@
-import { Sequence, Audio, staticFile } from "remotion";
+import { Sequence, Audio, staticFile, useVideoConfig } from "remotion";
 import type { ChartRaceConfig } from "../types";
-import { LAYOUT } from "../hooks/useBarPositions";
 import { RaceAnimation } from "./RaceAnimation";
 import { IntroScreen } from "./IntroScreen";
 import { OutroScreen } from "./OutroScreen";
@@ -19,6 +18,7 @@ export function computeRaceDuration(
 
 export const BarChartRace: React.FC<ChartRaceConfig> = (props) => {
   const { data, style } = props;
+  const { width, height } = useVideoConfig();
 
   const raceDuration = computeRaceDuration(data.timeLabels, style.durationPerStep);
 
@@ -30,8 +30,8 @@ export const BarChartRace: React.FC<ChartRaceConfig> = (props) => {
   return (
     <div
       style={{
-        width: LAYOUT.canvasWidth,
-        height: LAYOUT.canvasHeight,
+        width,
+        height,
         backgroundColor: "#0d1117",
         position: "relative",
         overflow: "hidden",

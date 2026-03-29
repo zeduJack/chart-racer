@@ -22,19 +22,29 @@ const defaultConfig: ChartRaceConfig = {
 const raceDuration = computeRaceDuration(sampleData.timeLabels, DURATION_PER_STEP);
 const durationInFrames = INTRO_DURATION + raceDuration + OUTRO_DURATION;
 
+// Format-Konfigurationen
+const FORMATS = [
+  { id: "BarChartRace",        width: 1920, height: 1080 }, // 16:9 YouTube
+  { id: "BarChartRace-Reels",  width: 1080, height: 1920 }, // 9:16 Reels/TikTok
+  { id: "BarChartRace-Square", width: 1080, height: 1080 }, // 1:1 Instagram
+];
+
 export const RemotionRoot: React.FC = () => {
   return (
     <>
-      <Composition
-        id="BarChartRace"
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        component={BarChartRace as any}
-        durationInFrames={durationInFrames}
-        fps={30}
-        width={1920}
-        height={1080}
-        defaultProps={defaultConfig}
-      />
+      {FORMATS.map(({ id, width, height }) => (
+        <Composition
+          key={id}
+          id={id}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          component={BarChartRace as any}
+          durationInFrames={durationInFrames}
+          fps={30}
+          width={width}
+          height={height}
+          defaultProps={defaultConfig}
+        />
+      ))}
     </>
   );
 };

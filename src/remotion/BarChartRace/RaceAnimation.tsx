@@ -1,5 +1,4 @@
-import { useCurrentFrame } from "remotion";
-import { useBarPositions, LAYOUT } from "../hooks/useBarPositions";
+import { useBarPositions } from "../hooks/useBarPositions";
 import type { ChartRaceConfig } from "../types";
 import { Bar } from "./Bar";
 import { TimeDisplay } from "./TimeDisplay";
@@ -11,12 +10,16 @@ interface RaceAnimationProps extends ChartRaceConfig {
 }
 
 export const RaceAnimation: React.FC<RaceAnimationProps> = ({ data, style, totalDuration }) => {
-  const frame = useCurrentFrame();
-  const { bars, stepProgress, currentLabel, nextLabel, maxValue, maxBarWidth } =
+  const { bars, stepProgress, currentLabel, nextLabel, maxValue, maxBarWidth, layout } =
     useBarPositions(data, style);
 
   const slotHeight = style.barHeight + style.barGap;
-  const barsEndY = LAYOUT.paddingTop + style.visibleBars * slotHeight;
+  const barsEndY = layout.paddingTop + style.visibleBars * slotHeight;
+
+  const titleFontSize = Math.round(44 * layout.scale);
+  const subtitleFontSize = Math.round(22 * layout.scale);
+  const titleTop = Math.round(36 * layout.scale);
+  const subtitleTop = Math.round(92 * layout.scale);
 
   return (
     <div
@@ -30,11 +33,11 @@ export const RaceAnimation: React.FC<RaceAnimationProps> = ({ data, style, total
       <div
         style={{
           position: "absolute",
-          top: 36,
-          left: LAYOUT.paddingLeft,
-          right: LAYOUT.paddingRight,
+          top: titleTop,
+          left: layout.paddingLeft,
+          right: layout.paddingRight,
           color: "rgba(255,255,255,0.95)",
-          fontSize: 44,
+          fontSize: titleFontSize,
           fontWeight: 700,
           fontFamily: "'Inter', 'Helvetica Neue', sans-serif",
           letterSpacing: "-0.5px",
@@ -48,11 +51,11 @@ export const RaceAnimation: React.FC<RaceAnimationProps> = ({ data, style, total
       <div
         style={{
           position: "absolute",
-          top: 92,
-          left: LAYOUT.paddingLeft,
-          right: LAYOUT.paddingRight,
+          top: subtitleTop,
+          left: layout.paddingLeft,
+          right: layout.paddingRight,
           color: "rgba(255,255,255,0.45)",
-          fontSize: 22,
+          fontSize: subtitleFontSize,
           fontWeight: 400,
           fontFamily: "'Inter', 'Helvetica Neue', sans-serif",
           letterSpacing: "0.1px",
