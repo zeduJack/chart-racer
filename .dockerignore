@@ -1,0 +1,33 @@
+# Node
+node_modules
+npm-debug.log*
+
+# Next.js
+.next
+out
+
+# Tests
+tests
+playwright-report
+test-results
+
+# Git
+.git
+.gitignore
+
+# Environment (niemals ins Image)
+.env
+.env.local
+.env.*.local
+
+# Dev-Dateien
+*.md
+Dockerfile
+.dockerignore
+
+# SQLite DB (wird zur Laufzeit erstellt)
+*.sqlite
+*.db
+
+# TypeScript source maps
+*.map
