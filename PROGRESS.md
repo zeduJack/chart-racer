@@ -2,7 +2,7 @@
 
 ## Aktueller Status
 - **Phase:** 2 — AI-Datenrecherche
-- **Aktuelle Story:** 2.1 — Claude API Integration mit Web Search Tool
+- **Aktuelle Story:** 2.2 — Themen-History und Blickwinkel-Tracking (SQLite)
 - **Status:** IN PROGRESS
 
 ## Phase 1: Remotion Setup + Core Animation + Erstes Video
@@ -14,7 +14,7 @@
 - [x] **1.6** Visual Polish der Animation
 
 ## Phase 2: AI-Datenrecherche
-- [ ] **2.1** Claude API Integration mit Web Search Tool
+- [x] **2.1** Claude API Integration mit Web Search Tool
 - [ ] **2.2** Themen-History und Blickwinkel-Tracking (SQLite)
 - [ ] **2.3** Daten-Validierung und Fallback-Logik
 - [ ] **2.4** CLI + API für AI-generierte Videos
@@ -35,6 +35,10 @@
 
 ## Notizen
 - Playwright installiert (`@playwright/test ^1.58.2`), 5 UI-Tests laufen durch (port 3003)
+- `@anthropic-ai/sdk ^0.80.0` installiert
+- `src/lib/ai-researcher.ts`: Agent-Loop mit Web Search Tool (`web_search_20260209`), liefert strukturiertes JSON
+- `tests/e2e/ai-researcher.spec.ts`: 5 Validierungs-Tests grün, echter API-Test skip ohne Key
+- `.env.local.example` als Template für ANTHROPIC_API_KEY
 - `tests/visual/editor-ui.spec.ts` — Dashboard UI: Navigation, Stats, Render-Commands, JS-Fehler, Screenshot
 - `tests/visual/animation-frames.spec.ts` — Remotion Stills für 5 Checkpoints (rendert via execSync)
 - Push-ready nach letztem Commit `chore(tests): ...`

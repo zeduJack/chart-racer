@@ -8,6 +8,7 @@
 
 import { renderVideo } from "../lib/render";
 import type { OutputFormat, Resolution } from "../lib/render";
+import { researchTopic } from "../lib/ai-researcher";
 
 const args = process.argv.slice(2);
 const command = args[0];
@@ -47,17 +48,39 @@ async function main() {
       break;
     }
 
+    case "research": {
+      const topic = getArg("--topic", "");
+      if (!topic) {
+        console.error("❌ --topic ist erforderlich. Beispiel: research --topic \"Tech-Aktien\"");
+        process.exit(1);
+      }
+
+      console.log(`\n🔍 Recherchiere Daten für Thema: "${topic}" ...`);
+      const result = await researchTopic(topic, []);
+
+      console.log("\n✅ Recherche abgeschlossen:");
+      console.log(`   Titel: ${result.title}`);
+      console.log(`   Blickwinkel: ${result.angle}`);
+      console.log(`   Teilnehmer: ${result.participants.length}`);
+      console.log(`   Zeitpunkte: ${result.timeLabels.join(", ")}`);
+      console.log("\nJSON-Output:");
+      console.log(JSON.stringify(result, null, 2));
+      break;
+    }
+
     default:
       console.log(`
 ChartRacer CLI
 
 Befehle:
-  render   [--format 16:9|9:16|1:1] [--resolution 720p|1080p|4k] [--fps 30|60] [--output path.mp4]
-  still    [--frame N]
+  render    [--format 16:9|9:16|1:1] [--resolution 720p|1080p|4k] [--fps 30|60] [--output path.mp4]
+  still     [--frame N]
+  research  --topic "Thema"
 
 Beispiele:
   npx ts-node src/cli/index.ts render --format 16:9 --resolution 1080p
   npx ts-node src/cli/index.ts still --frame 300
+  npx ts-node src/cli/index.ts research --topic "Tech-Aktien"
 `);
   }
 }
