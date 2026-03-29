@@ -39,10 +39,10 @@ export async function POST(req: NextRequest) {
   try {
     // Sicherstellen dass angle gesetzt ist (bei manuell hochgeladenen Daten fehlt es)
     const dataWithAngle: ResearchResult = {
-      angle: "Eigene Daten",
-      timeUnit: "year",
-      socialMedia: undefined,
       ...data,
+      angle: data.angle || "Eigene Daten",
+      timeUnit: data.timeUnit || "year",
+      socialMedia: data.socialMedia ?? undefined,
     };
 
     // In DB speichern (Titel als Topic-Name)

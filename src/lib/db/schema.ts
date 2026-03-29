@@ -40,6 +40,16 @@ export const researchResults = sqliteTable("research_results", {
     .default(sql`(datetime('now'))`),
 });
 
+// Manuell hochgeladene / gespeicherte Datensätze
+export const userDatasets = sqliteTable("user_datasets", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  dataJson: text("data_json").notNull(), // vollständige ResearchResult als JSON
+  createdAt: text("created_at")
+    .notNull()
+    .default(sql`(datetime('now'))`),
+});
+
 // Generierte Videos
 export const generatedVideos = sqliteTable("generated_videos", {
   id: integer("id").primaryKey({ autoIncrement: true }),

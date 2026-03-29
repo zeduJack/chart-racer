@@ -4,10 +4,6 @@ import { useState, useRef, useCallback } from "react";
 import { parseAuto } from "@/lib/csv-parser";
 import type { ResearchResult } from "@/lib/ai-researcher";
 
-interface UploadFormProps {
-  onDataParsed: (data: ResearchResult) => void;
-}
-
 const EXAMPLE_CSV = `name,color,2020,2021,2022,2023,2024
 Apple,#6b7280,274,366,394,383,391
 Microsoft,#0078d4,143,168,198,212,245
@@ -15,12 +11,19 @@ Alphabet,#4285f4,183,258,283,307,350
 Amazon,#ff9900,386,470,514,575,638
 NVIDIA,#76b900,11,17,27,44,130`;
 
-export function UploadForm({ onDataParsed }: UploadFormProps) {
+interface UploadFormProps {
+  onDataParsed: (data: ResearchResult) => void;
+  onSaved?: () => void;
+}
+
+export function UploadForm({ onDataParsed, onSaved }: UploadFormProps) {
   const [text, setText] = useState("");
   const [dragOver, setDragOver] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [warnings, setWarnings] = useState<string[]>([]);
   const [parsed, setParsed] = useState<ResearchResult | null>(null);
+  const [saveName, setSaveName] = useState("");
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const fileRef = useRef<HTMLInputElement>(null);
 
   function handleParse(input: string) {
@@ -43,6 +46,7 @@ export function UploadForm({ onDataParsed }: UploadFormProps) {
   function handleTextChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setText(e.target.value);
     handleParse(e.target.value);
+    setSaveStatus("idle");
   }
 
   async function handleFile(file: File) {
@@ -66,10 +70,29 @@ export function UploadForm({ onDataParsed }: UploadFormProps) {
   function loadExample() {
     setText(EXAMPLE_CSV);
     handleParse(EXAMPLE_CSV);
+    setSaveStatus("idle");
   }
 
   function handleUse() {
     if (parsed) onDataParsed(parsed);
+  }
+
+  async function handleSave() {
+    if (!parsed) return;
+    const name = saveName.trim() || parsed.title || "Mein Datensatz";
+    setSaveStatus("saving");
+    try {
+      const res = await fetch("/api/datasets", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, data: parsed }),
+      });
+      if (!res.ok) throw new Error("Fehler beim Speichern");
+      setSaveStatus("saved");
+      onSaved?.();
+    } catch {
+      setSaveStatus("error");
+    }
   }
 
   return (
@@ -212,13 +235,43 @@ export function UploadForm({ onDataParsed }: UploadFormProps) {
             ))}
           </div>
 
-          <button
-            type="button"
-            onClick={handleUse}
-            className="w-full py-2.5 rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold text-sm hover:opacity-90 transition"
-          >
-            Diese Daten für Preview verwenden →
-          </button>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={handleUse}
+              className="flex-1 py-2.5 rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold text-sm hover:opacity-90 transition"
+            >
+              In Preview laden →
+            </button>
+          </div>
+
+          {/* Speichern */}
+          <div className="border-t border-white/[0.08] pt-3 space-y-2">
+            <div className="text-xs text-white/40">In Datenbank speichern</div>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={saveName}
+                onChange={(e) => setSaveName(e.target.value)}
+                placeholder={parsed.title || "Name des Datensatzes"}
+                className="flex-1 bg-white/[0.05] border border-white/[0.08] rounded px-3 py-1.5 text-white text-xs placeholder-white/25 focus:outline-none focus:border-sky-500/40"
+              />
+              <button
+                type="button"
+                onClick={handleSave}
+                disabled={saveStatus === "saving" || saveStatus === "saved"}
+                className={`px-4 py-1.5 rounded text-xs font-semibold transition ${
+                  saveStatus === "saved"
+                    ? "bg-green-600/60 text-green-200 cursor-default"
+                    : saveStatus === "error"
+                    ? "bg-red-600/60 text-red-200"
+                    : "bg-sky-600 hover:bg-sky-500 text-white disabled:opacity-50"
+                }`}
+              >
+                {saveStatus === "saving" ? "Speichert…" : saveStatus === "saved" ? "✓ Gespeichert" : saveStatus === "error" ? "Fehler" : "Speichern"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

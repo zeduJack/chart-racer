@@ -5,6 +5,7 @@ import { GenerateForm } from "./GenerateForm";
 import { UploadForm } from "./UploadForm";
 import { ConfigPanel } from "./ConfigPanel";
 import { ResearchHistory } from "./ResearchHistory";
+import { SavedDatasets } from "./SavedDatasets";
 import { ConfigurablePlayer } from "@/components/preview/ConfigurablePlayer";
 import type { ResearchResult } from "@/lib/ai-researcher";
 import type { ChartStyle } from "@/remotion/types";
@@ -22,6 +23,7 @@ export function EditorTabs() {
   const [configOpen, setConfigOpen] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [format, setFormat] = useState<"16:9" | "9:16" | "1:1">("16:9");
+  const [savedRefresh, setSavedRefresh] = useState(0);
 
   function handleDataParsed(data: ResearchResult) {
     setUploadedData(data);
@@ -69,15 +71,32 @@ export function EditorTabs() {
         {tab === "saved" && (
           <>
             <div className="mb-5">
-              <h2 className="text-base font-semibold mb-1">Gespeicherte Recherchen</h2>
+              <h2 className="text-base font-semibold mb-1">Gespeicherte Daten</h2>
               <p className="text-sm text-white/40">
-                Alle KI-Recherchen werden hier dauerhaft gespeichert — mit Zeitstempel und Thema.
+                KI-Recherchen und eigene Datensätze — laden, herunterladen oder löschen.
               </p>
             </div>
-            <ResearchHistory onLoad={(data) => {
-              setUploadedData(data);
-              setTab("upload");
-            }} />
+
+            <div className="space-y-6">
+              <div>
+                <div className="text-xs text-white/40 uppercase tracking-widest mb-3">Eigene Datensätze</div>
+                <SavedDatasets
+                  onLoad={(data) => {
+                    setUploadedData(data);
+                    setTab("upload");
+                  }}
+                  refreshTrigger={savedRefresh}
+                />
+              </div>
+
+              <div className="border-t border-white/[0.06] pt-5">
+                <div className="text-xs text-white/40 uppercase tracking-widest mb-3">KI-Recherchen</div>
+                <ResearchHistory onLoad={(data) => {
+                  setUploadedData(data);
+                  setTab("upload");
+                }} />
+              </div>
+            </div>
           </>
         )}
 
@@ -89,7 +108,7 @@ export function EditorTabs() {
                 CSV oder JSON mit deinen eigenen Zeitreihendaten für das Bar Chart Race.
               </p>
             </div>
-            <UploadForm onDataParsed={handleDataParsed} />
+            <UploadForm onDataParsed={handleDataParsed} onSaved={() => setSavedRefresh((n) => n + 1)} />
 
             {uploadedData && (
               <div className="mt-5 pt-5 border-t border-white/[0.06]">
@@ -167,8 +186,8 @@ export function EditorTabs() {
       {/* Info-Cards */}
       {tab === "saved" && (
         <div className="grid grid-cols-3 gap-3">
-          <InfoCard icon="💾" title="Automatisch gespeichert" text="Jede KI-Recherche wird sofort in der Datenbank gespeichert" />
-          <InfoCard icon="📅" title="Zeitstempel" text="Datum und Uhrzeit jeder Recherche werden festgehalten" />
+          <InfoCard icon="💾" title="Eigene Datensätze" text="Hochgeladene CSV/JSON-Daten dauerhaft speichern und wiederverwenden" />
+          <InfoCard icon="⬇️" title="Download" text="Jeden Datensatz als CSV oder JSON-Datei herunterladen" />
           <InfoCard icon="▶️" title="In Preview laden" text="Klicke 'In Preview laden' um die Daten direkt zu visualisieren" />
         </div>
       )}
