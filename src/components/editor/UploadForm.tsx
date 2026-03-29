@@ -136,6 +136,7 @@ export function UploadForm({ onDataParsed, onSaved }: UploadFormProps) {
             type="button"
             onClick={loadExample}
             className="text-xs text-sky-400 hover:text-sky-300 transition"
+            title="Beispiel-CSV mit Tech-Marktkapitalisierungen laden"
           >
             Beispiel laden
           </button>
@@ -240,6 +241,7 @@ export function UploadForm({ onDataParsed, onSaved }: UploadFormProps) {
               type="button"
               onClick={handleUse}
               className="flex-1 py-2.5 rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold text-sm hover:opacity-90 transition"
+              title="Daten in die Live-Vorschau übernehmen — der Player zeigt sofort die Animation"
             >
               In Preview laden →
             </button>
@@ -260,6 +262,7 @@ export function UploadForm({ onDataParsed, onSaved }: UploadFormProps) {
                 type="button"
                 onClick={handleSave}
                 disabled={saveStatus === "saving" || saveStatus === "saved"}
+                title="Datensatz dauerhaft in der Datenbank speichern — erscheint dann im Tab «Gespeichert»"
                 className={`px-4 py-1.5 rounded text-xs font-semibold transition ${
                   saveStatus === "saved"
                     ? "bg-green-600/60 text-green-200 cursor-default"

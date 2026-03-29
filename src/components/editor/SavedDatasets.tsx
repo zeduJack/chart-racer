@@ -24,13 +24,13 @@ export function SavedDatasets({ onLoad, refreshTrigger }: SavedDatasetsProps) {
     try {
       const res = await fetch("/api/datasets");
       const data = await res.json();
-      // API liefert snake_case, wir mappen auf camelCase
+      // Drizzle liefert camelCase
       setDatasets(
-        data.map((d: { id: number; name: string; data_json: string; created_at: string }) => ({
+        data.map((d: { id: number; name: string; dataJson: string; createdAt: string }) => ({
           id: d.id,
           name: d.name,
-          dataJson: d.data_json,
-          createdAt: d.created_at,
+          dataJson: d.dataJson,
+          createdAt: d.createdAt,
         }))
       );
     } catch {
@@ -119,7 +119,7 @@ export function SavedDatasets({ onLoad, refreshTrigger }: SavedDatasetsProps) {
                 type="button"
                 onClick={() => handleDelete(dataset.id)}
                 className="text-white/20 hover:text-red-400 transition text-lg leading-none flex-shrink-0"
-                title="Löschen"
+                title="Datensatz dauerhaft aus der Datenbank löschen"
               >
                 ×
               </button>
@@ -149,6 +149,7 @@ export function SavedDatasets({ onLoad, refreshTrigger }: SavedDatasetsProps) {
                 type="button"
                 onClick={() => handleLoad(dataset)}
                 className="flex-1 py-1.5 rounded bg-sky-600 hover:bg-sky-500 text-white text-xs font-semibold transition"
+                title="Daten in die Live-Vorschau laden und im Player abspielen"
               >
                 In Preview laden
               </button>
@@ -156,7 +157,7 @@ export function SavedDatasets({ onLoad, refreshTrigger }: SavedDatasetsProps) {
                 type="button"
                 onClick={() => handleDownloadCsv(dataset)}
                 className="px-3 py-1.5 rounded bg-white/[0.06] hover:bg-white/[0.10] text-white/60 hover:text-white text-xs transition"
-                title="Als CSV herunterladen"
+                title="Als CSV-Datei auf deinen Computer herunterladen"
               >
                 CSV
               </button>
@@ -164,7 +165,7 @@ export function SavedDatasets({ onLoad, refreshTrigger }: SavedDatasetsProps) {
                 type="button"
                 onClick={() => handleDownloadJson(dataset)}
                 className="px-3 py-1.5 rounded bg-white/[0.06] hover:bg-white/[0.10] text-white/60 hover:text-white text-xs transition"
-                title="Als JSON herunterladen"
+                title="Als JSON-Datei auf deinen Computer herunterladen"
               >
                 JSON
               </button>
