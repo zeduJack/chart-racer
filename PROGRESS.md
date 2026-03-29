@@ -1,8 +1,8 @@
 # ChartRacer — Fortschritt
 
 ## Aktueller Status
-- **Phase:** 2 — AI-Datenrecherche
-- **Aktuelle Story:** 2.4 — CLI + API für AI-generierte Videos
+- **Phase:** 3 — Web Editor UI
+- **Aktuelle Story:** 3.1 — Editor-Seite mit AI-Themen-Input
 - **Status:** IN PROGRESS
 
 ## Phase 1: Remotion Setup + Core Animation + Erstes Video
@@ -17,7 +17,7 @@
 - [x] **2.1** Claude API Integration mit Web Search Tool
 - [x] **2.2** Themen-History und Blickwinkel-Tracking (SQLite)
 - [x] **2.3** Daten-Validierung und Fallback-Logik
-- [ ] **2.4** CLI + API für AI-generierte Videos
+- [x] **2.4** CLI + API für AI-generierte Videos
 
 ## Phase 3: Web Editor UI
 - [ ] **3.1** Editor-Seite mit AI-Themen-Input
@@ -42,6 +42,11 @@
 - `src/lib/db/schema.ts` + `src/lib/db/index.ts`: Drizzle ORM Schema (topics, angles, generated_videos) mit lazy-init
 - `src/lib/topic-manager.ts`: Topic/Angle/Video CRUD mit History-Tracking
 - `tests/e2e/topic-manager.spec.ts`: 5 SQLite-Tests alle grün
+- `src/app/api/generate/route.ts`: POST /api/generate (AI + Render) + GET
+- `src/app/api/videos/route.ts`: GET /api/videos
+- `src/app/api/topics/route.ts`: GET + POST /api/topics
+- CLI: generate, research, list, topics Befehle
+- `tests/e2e/api-trigger.spec.ts`: 7/8 Tests grün (1 skipped ohne API-Key)
 - `tests/visual/editor-ui.spec.ts` — Dashboard UI: Navigation, Stats, Render-Commands, JS-Fehler, Screenshot
 - `tests/visual/animation-frames.spec.ts` — Remotion Stills für 5 Checkpoints (rendert via execSync)
 - Push-ready nach letztem Commit `chore(tests): ...`
