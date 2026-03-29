@@ -2,8 +2,8 @@
 
 ## Aktueller Status
 - **Phase:** 4 — Polish, Templates & Deployment
-- **Aktuelle Story:** 4.4 — Dockerfile + CapRover Deployment
-- **Status:** IN PROGRESS
+- **Aktuelle Story:** —
+- **Status:** ABGESCHLOSSEN ✅
 
 ## Phase 1: Remotion Setup + Core Animation + Erstes Video
 - [x] **1.1** Projekt-Setup (Next.js 16 + Remotion + Git + CLAUDE.md)
@@ -30,8 +30,8 @@
 - [x] **4.1** Template-System
 - [x] **4.2** Social-Media Metadaten
 - [x] **4.3** Multi-Format Rendering
-- [ ] **4.4** Dockerfile + CapRover Deployment
-- [ ] **4.5** Finales Visual Polish
+- [x] **4.4** Dockerfile + CapRover Deployment
+- [x] **4.5** Finales Visual Polish
 
 ## Notizen
 - Playwright installiert (`@playwright/test ^1.58.2`), 5 UI-Tests laufen durch (port 3003)
@@ -68,3 +68,11 @@
 - Alle Remotion-Komponenten (Bar, TimeDisplay, ValueAxis, ProgressBar, RaceAnimation) nutzen dynamisches Layout
 - Root.tsx: 3 Kompositionen (16:9, 9:16, 1:1)
 - `tests/e2e/multi-format.spec.ts`: 8/8 Tests grün
+- `Dockerfile`: Multi-stage (deps/builder/runner), System-Chromium + FFmpeg, Non-root User
+- `next.config.ts`: standalone output + serverExternalPackages: better-sqlite3
+- `captain-definition`: CapRover Deploy-Config
+- `.dockerignore`: Lean-Image Konfiguration
+- IntroScreen: responsiv via computeLayout, animierte Titel/Badge, Gradient-Hintergrund, Accent-Linie
+- OutroScreen: responsiv, skalierte Schriften/Abstände, Medaillen-Glow für Top 3
+- RaceAnimation: subtiler Gradient-Hintergrund, Accent-Linie neben Titel
+- Alle Remotion-Screens vollständig format-responsive

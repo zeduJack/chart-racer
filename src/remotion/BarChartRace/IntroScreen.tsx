@@ -1,48 +1,71 @@
-import { useCurrentFrame, useVideoConfig, interpolate, Easing } from "remotion";
+import { useCurrentFrame, interpolate, useVideoConfig, Easing } from "remotion";
+import type { ChartData } from "../types";
+import { computeLayout } from "../hooks/useBarPositions";
 
 interface IntroScreenProps {
-  title: string;
-  subtitle: string;
+  data: ChartData;
   durationInFrames: number;
 }
 
 export const IntroScreen: React.FC<IntroScreenProps> = ({
-  title,
-  subtitle,
+  data,
   durationInFrames,
 }) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  const { width, height } = useVideoConfig();
+  const layout = computeLayout(width, height);
 
-  // Fade-In in den ersten 20 Frames
+  // Fade-In
   const fadeIn = interpolate(frame, [0, 20], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.quad),
   });
 
-  // Fade-Out in den letzten 15 Frames
+  // Fade-Out am Ende
   const fadeOut = interpolate(
     frame,
-    [durationInFrames - 15, durationInFrames],
+    [durationInFrames - 20, durationInFrames],
     [1, 0],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
 
   const opacity = Math.min(fadeIn, fadeOut);
 
-  // Titel von unten einschwingen
-  const titleY = interpolate(frame, [0, 25], [40, 0], {
+  // Titel animiert rein
+  const titleX = interpolate(frame, [5, 25], [-40, 0], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.cubic),
   });
 
-  // Subtitle verzögert
-  const subtitleOpacity = interpolate(frame, [15, 35], [0, 1], {
+  // Untertitel mit Verzögerung
+  const subtitleX = interpolate(frame, [12, 32], [-40, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+    easing: Easing.out(Easing.cubic),
+  });
+  const subtitleOpacity = interpolate(frame, [12, 32], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
+
+  // Zeitraum-Badge mit weiterer Verzögerung
+  const badgeOpacity = interpolate(frame, [20, 40], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  const firstLabel = data.timeLabels[0];
+  const lastLabel = data.timeLabels[data.timeLabels.length - 1];
+
+  const titleFontSize = Math.round(72 * layout.scale);
+  const subtitleFontSize = Math.round(30 * layout.scale);
+  const badgeFontSize = Math.round(20 * layout.scale);
+  const accentWidth = Math.round(6 * layout.scale);
+  const accentHeight = Math.round(80 * layout.scale);
+  const paddingH = Math.round(120 * layout.scale);
+  const gap = Math.round(24 * layout.scale);
 
   return (
     <div
@@ -51,54 +74,129 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({
         inset: 0,
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
         justifyContent: "center",
+        padding: `0 ${paddingH}px`,
         opacity,
         backgroundColor: "#0d1117",
+        overflow: "hidden",
       }}
     >
-      {/* Dekorativer Akzentbalken */}
+      {/* Hintergrund-Dekoration */}
       <div
         style={{
-          width: 80,
-          height: 4,
-          backgroundColor: "#38bdf8",
-          borderRadius: 2,
-          marginBottom: 40,
-          boxShadow: "0 0 24px #38bdf880",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background:
+            "radial-gradient(ellipse at 15% 50%, rgba(56,189,248,0.07) 0%, transparent 55%), " +
+            "radial-gradient(ellipse at 85% 30%, rgba(168,85,247,0.05) 0%, transparent 55%)",
+          pointerEvents: "none",
         }}
       />
 
-      {/* Haupttitel */}
+      {/* Accent-Linie */}
       <div
         style={{
-          fontSize: 80,
+          width: accentWidth,
+          height: accentHeight,
+          borderRadius: accentWidth / 2,
+          background: "linear-gradient(to bottom, #38bdf8, #a78bfa)",
+          marginBottom: gap,
+          boxShadow: "0 0 20px rgba(56,189,248,0.4)",
+        }}
+      />
+
+      {/* Titel */}
+      <div
+        style={{
+          fontSize: titleFontSize,
           fontWeight: 800,
           color: "rgba(255,255,255,0.95)",
           fontFamily: "'Inter', 'Helvetica Neue', sans-serif",
-          letterSpacing: "-1px",
-          textAlign: "center",
-          maxWidth: 1400,
-          lineHeight: 1.15,
-          transform: `translateY(${titleY}px)`,
+          letterSpacing: "-1.5px",
+          lineHeight: 1.1,
+          marginBottom: Math.round(16 * layout.scale),
+          transform: `translateX(${titleX}px)`,
         }}
       >
-        {title}
+        {data.title}
       </div>
 
       {/* Untertitel */}
       <div
         style={{
-          fontSize: 32,
+          fontSize: subtitleFontSize,
           fontWeight: 400,
           color: "rgba(255,255,255,0.45)",
           fontFamily: "'Inter', 'Helvetica Neue', sans-serif",
-          marginTop: 28,
-          textAlign: "center",
+          marginBottom: Math.round(40 * layout.scale),
+          transform: `translateX(${subtitleX}px)`,
           opacity: subtitleOpacity,
+          letterSpacing: "0.2px",
         }}
       >
-        {subtitle}
+        {data.subtitle}
+      </div>
+
+      {/* Zeitraum-Badge */}
+      <div
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: Math.round(10 * layout.scale),
+          opacity: badgeOpacity,
+          alignSelf: "flex-start",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: Math.round(8 * layout.scale),
+            padding: `${Math.round(10 * layout.scale)}px ${Math.round(20 * layout.scale)}px`,
+            borderRadius: Math.round(8 * layout.scale),
+            border: "1px solid rgba(56,189,248,0.25)",
+            backgroundColor: "rgba(56,189,248,0.08)",
+          }}
+        >
+          <div
+            style={{
+              width: Math.round(8 * layout.scale),
+              height: Math.round(8 * layout.scale),
+              borderRadius: "50%",
+              backgroundColor: "#38bdf8",
+              boxShadow: "0 0 6px #38bdf8",
+            }}
+          />
+          <span
+            style={{
+              fontSize: badgeFontSize,
+              fontWeight: 600,
+              color: "rgba(255,255,255,0.6)",
+              fontFamily: "'Inter', sans-serif",
+              letterSpacing: "1px",
+            }}
+          >
+            {firstLabel} – {lastLabel}
+          </span>
+        </div>
+
+        <div
+          style={{
+            padding: `${Math.round(10 * layout.scale)}px ${Math.round(20 * layout.scale)}px`,
+            borderRadius: Math.round(8 * layout.scale),
+            border: "1px solid rgba(255,255,255,0.07)",
+            backgroundColor: "rgba(255,255,255,0.03)",
+            fontSize: badgeFontSize,
+            fontWeight: 500,
+            color: "rgba(255,255,255,0.3)",
+            fontFamily: "'Inter', sans-serif",
+          }}
+        >
+          {data.participants.length} Teilnehmer
+        </div>
       </div>
     </div>
   );

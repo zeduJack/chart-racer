@@ -52,8 +52,7 @@ export const BarChartRace: React.FC<ChartRaceConfig> = (props) => {
       {/* Intro-Sequenz */}
       <Sequence durationInFrames={INTRO_DURATION}>
         <IntroScreen
-          title={data.title}
-          subtitle={data.subtitle}
+          data={data}
           durationInFrames={INTRO_DURATION}
         />
       </Sequence>

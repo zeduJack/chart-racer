@@ -29,6 +29,31 @@ export const RaceAnimation: React.FC<RaceAnimationProps> = ({ data, style, total
         overflow: "hidden",
       }}
     >
+      {/* Hintergrund-Gradient */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "radial-gradient(ellipse at 5% 50%, rgba(56,189,248,0.04) 0%, transparent 50%), " +
+            "radial-gradient(ellipse at 95% 20%, rgba(168,85,247,0.03) 0%, transparent 45%)",
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Accent-Linie neben Titel */}
+      <div
+        style={{
+          position: "absolute",
+          top: titleTop,
+          left: layout.paddingLeft - Math.round(14 * layout.scale),
+          width: Math.round(4 * layout.scale),
+          height: titleFontSize * 1.2 + subtitleFontSize * 1.4 + Math.round(6 * layout.scale),
+          background: "linear-gradient(to bottom, #38bdf8, #a78bfa88)",
+          borderRadius: Math.round(2 * layout.scale),
+        }}
+      />
+
       {/* Titel */}
       <div
         style={{
