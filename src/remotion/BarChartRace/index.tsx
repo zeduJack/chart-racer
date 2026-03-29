@@ -60,7 +60,7 @@ export const BarChartRace: React.FC<ChartRaceConfig> = (props) => {
 
       {/* Race-Animation */}
       <Sequence from={INTRO_DURATION} durationInFrames={raceDuration}>
-        <RaceAnimation {...props} />
+        <RaceAnimation {...props} totalDuration={raceDuration} />
       </Sequence>
 
       {/* Outro-Sequenz */}

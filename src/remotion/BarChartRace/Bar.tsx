@@ -55,7 +55,7 @@ export const Bar: React.FC<BarProps> = ({
         zIndex,
       }}
     >
-      {/* Hintergrund-Mask nur für den Label-Bereich links */}
+      {/* Hintergrund-Mask für Label-Bereich */}
       <div
         style={{
           position: "absolute",
@@ -65,20 +65,38 @@ export const Bar: React.FC<BarProps> = ({
           backgroundColor: "#0d1117",
         }}
       />
-
-      {/* Firmen-Label links */}
+      {/* Rang-Nummer */}
       <div
         style={{
           position: "absolute",
           left: 0,
-          width: LAYOUT.paddingLeft - 20,
+          width: 52,
+          height: barHeight,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          color: "rgba(255,255,255,0.2)",
+          fontSize: 15,
+          fontWeight: 700,
+          fontFamily: "'Inter', 'Helvetica Neue', sans-serif",
+        }}
+      >
+        #{Math.round(bar.interpolatedRank) + 1}
+      </div>
+
+      {/* Firmen-Label links (mit Platz für Rang-Nummer) */}
+      <div
+        style={{
+          position: "absolute",
+          left: 52,
+          width: LAYOUT.paddingLeft - 52 - 16,
           height: barHeight,
           display: "flex",
           alignItems: "center",
           justifyContent: "flex-end",
-          paddingRight: 20,
+          paddingRight: 16,
           color: "rgba(255,255,255,0.92)",
-          fontSize: 22,
+          fontSize: 21,
           fontWeight: 600,
           fontFamily: "'Inter', 'Helvetica Neue', sans-serif",
           letterSpacing: "-0.3px",
@@ -97,9 +115,22 @@ export const Bar: React.FC<BarProps> = ({
           top: 0,
           width: barWidthPx,
           height: barHeight,
-          backgroundColor: bar.color,
+          background: `linear-gradient(90deg, ${bar.color}cc 0%, ${bar.color} 60%, ${bar.color}ee 100%)`,
           borderRadius: "0 8px 8px 0",
-          boxShadow: `0 0 20px ${bar.color}66`,
+          boxShadow: `0 2px 16px ${bar.color}44`,
+        }}
+      />
+      {/* Heller Glanzeffekt oben */}
+      <div
+        style={{
+          position: "absolute",
+          left: LAYOUT.paddingLeft,
+          top: 0,
+          width: barWidthPx,
+          height: Math.floor(barHeight * 0.45),
+          background: "linear-gradient(180deg, rgba(255,255,255,0.08) 0%, transparent 100%)",
+          borderRadius: "0 8px 0 0",
+          pointerEvents: "none",
         }}
       />
 

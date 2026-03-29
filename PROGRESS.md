@@ -1,8 +1,8 @@
 # ChartRacer — Fortschritt
 
 ## Aktueller Status
-- **Phase:** 1 — Remotion Setup + Core Animation + Erstes Video
-- **Aktuelle Story:** 1.6 — Visual Polish
+- **Phase:** 2 — AI-Datenrecherche
+- **Aktuelle Story:** 2.1 — Claude API Integration mit Web Search Tool
 - **Status:** IN PROGRESS
 
 ## Phase 1: Remotion Setup + Core Animation + Erstes Video
@@ -11,7 +11,7 @@
 - [x] **1.3** Bilder/Logos an Balken
 - [x] **1.4** Audio + Intro/Outro
 - [x] **1.5** Video-Rendering + CLI (erstes fertiges MP4)
-- [ ] **1.6** Visual Polish der Animation
+- [x] **1.6** Visual Polish der Animation
 
 ## Phase 2: AI-Datenrecherche
 - [ ] **2.1** Claude API Integration mit Web Search Tool

@@ -1,10 +1,17 @@
+import { useCurrentFrame } from "remotion";
 import { useBarPositions, LAYOUT } from "../hooks/useBarPositions";
 import type { ChartRaceConfig } from "../types";
 import { Bar } from "./Bar";
 import { TimeDisplay } from "./TimeDisplay";
 import { ValueAxis } from "./ValueAxis";
+import { ProgressBar } from "./ProgressBar";
 
-export const RaceAnimation: React.FC<ChartRaceConfig> = ({ data, style }) => {
+interface RaceAnimationProps extends ChartRaceConfig {
+  totalDuration: number;
+}
+
+export const RaceAnimation: React.FC<RaceAnimationProps> = ({ data, style, totalDuration }) => {
+  const frame = useCurrentFrame();
   const { bars, stepProgress, currentLabel, nextLabel, maxValue, maxBarWidth } =
     useBarPositions(data, style);
 
@@ -80,6 +87,9 @@ export const RaceAnimation: React.FC<ChartRaceConfig> = ({ data, style }) => {
           maxRank={style.visibleBars}
         />
       ))}
+
+      {/* Progress-Indikator am unteren Rand */}
+      <ProgressBar totalFrames={totalDuration} />
     </div>
   );
 };
