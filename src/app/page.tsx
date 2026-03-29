@@ -12,8 +12,8 @@ export default function Home() {
         </div>
         <nav className="flex gap-6 text-sm text-white/50">
           <a href="/" className="text-white/90 font-medium">Preview</a>
-          <span className="cursor-not-allowed">Editor</span>
-          <span className="cursor-not-allowed">Videos</span>
+          <a href="/editor" className="hover:text-white/80 transition">Editor</a>
+          <a href="/videos" className="hover:text-white/80 transition">Videos</a>
         </nav>
       </header>
 

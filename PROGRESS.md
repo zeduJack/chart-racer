@@ -2,7 +2,7 @@
 
 ## Aktueller Status
 - **Phase:** 3 — Web Editor UI
-- **Aktuelle Story:** 3.1 — Editor-Seite mit AI-Themen-Input
+- **Aktuelle Story:** 3.2 — Manueller Daten-Upload (CSV/JSON)
 - **Status:** IN PROGRESS
 
 ## Phase 1: Remotion Setup + Core Animation + Erstes Video
@@ -20,7 +20,7 @@
 - [x] **2.4** CLI + API für AI-generierte Videos
 
 ## Phase 3: Web Editor UI
-- [ ] **3.1** Editor-Seite mit AI-Themen-Input
+- [x] **3.1** Editor-Seite mit AI-Themen-Input
 - [ ] **3.2** Manueller Daten-Upload (CSV/JSON)
 - [ ] **3.3** Visuelles Konfigurations-Panel
 - [ ] **3.4** Remotion Player als Live-Preview
@@ -47,6 +47,10 @@
 - `src/app/api/topics/route.ts`: GET + POST /api/topics
 - CLI: generate, research, list, topics Befehle
 - `tests/e2e/api-trigger.spec.ts`: 7/8 Tests grün (1 skipped ohne API-Key)
+- `src/app/editor/page.tsx`: Editor-Seite mit AI-Themen-Input, Format-Auswahl, Dry-Run
+- `src/components/editor/GenerateForm.tsx`: Client-Component mit Loading-States und Ergebnis-Anzeige
+- `tests/visual/editor-page.spec.ts`: 8/8 HTTP-Tests grün (kein Browser-Binary nötig)
+- Playwright Browser-Tests: HTTP-Request-basiert (libnspr4 nicht auf Server installiert)
 - `tests/visual/editor-ui.spec.ts` — Dashboard UI: Navigation, Stats, Render-Commands, JS-Fehler, Screenshot
 - `tests/visual/animation-frames.spec.ts` — Remotion Stills für 5 Checkpoints (rendert via execSync)
 - Push-ready nach letztem Commit `chore(tests): ...`
