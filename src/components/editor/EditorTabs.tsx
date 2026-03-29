@@ -3,17 +3,27 @@
 import { useState } from "react";
 import { GenerateForm } from "./GenerateForm";
 import { UploadForm } from "./UploadForm";
+import { ConfigPanel } from "./ConfigPanel";
 import type { ResearchResult } from "@/lib/ai-researcher";
+import type { ChartStyle } from "@/remotion/types";
 
 type Tab = "ai" | "upload";
+
+const DEFAULT_STYLE: ChartStyle = {
+  visibleBars: 10,
+  durationPerStep: 60,
+  barHeight: 48,
+  barGap: 10,
+};
 
 export function EditorTabs() {
   const [tab, setTab] = useState<Tab>("ai");
   const [uploadedData, setUploadedData] = useState<ResearchResult | null>(null);
+  const [style, setStyle] = useState<ChartStyle>(DEFAULT_STYLE);
+  const [configOpen, setConfigOpen] = useState(false);
 
   function handleDataParsed(data: ResearchResult) {
     setUploadedData(data);
-    // Hier könnte später der Remotion Player aktualisiert werden
   }
 
   return (
@@ -69,6 +79,29 @@ export function EditorTabs() {
               </div>
             )}
           </>
+        )}
+      </div>
+
+      {/* Konfigurations-Panel */}
+      <div className="rounded-2xl border border-white/[0.06] overflow-hidden">
+        <button
+          type="button"
+          onClick={() => setConfigOpen(!configOpen)}
+          className="w-full flex items-center justify-between px-5 py-3 text-sm text-white/60 hover:text-white/80 hover:bg-white/[0.02] transition"
+        >
+          <span className="flex items-center gap-2">
+            <span>⚙️</span>
+            <span className="font-medium">Animations-Konfiguration</span>
+            <span className="text-xs text-white/30">
+              {style.visibleBars} Balken · {(style.durationPerStep / 30).toFixed(1)}s/Schritt
+            </span>
+          </span>
+          <span className={`transition-transform ${configOpen ? "rotate-180" : ""}`}>▾</span>
+        </button>
+        {configOpen && (
+          <div className="border-t border-white/[0.06] bg-white/[0.02] p-5">
+            <ConfigPanel style={style} onChange={setStyle} />
+          </div>
         )}
       </div>
 
