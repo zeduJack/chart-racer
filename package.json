@@ -9,7 +9,11 @@
     "lint": "eslint",
     "remotion:studio": "npx remotion studio src/remotion/index.ts",
     "remotion:render": "npx remotion render src/remotion/index.ts BarChartRace",
-    "remotion:still": "npx remotion still src/remotion/index.ts BarChartRace"
+    "remotion:still": "npx remotion still src/remotion/index.ts BarChartRace",
+    "chart-racer": "npx ts-node --project tsconfig.json src/cli/index.ts",
+    "render": "npx ts-node --project tsconfig.json src/cli/index.ts render",
+    "render:reels": "npx ts-node --project tsconfig.json src/cli/index.ts render --format 9:16",
+    "render:square": "npx ts-node --project tsconfig.json src/cli/index.ts render --format 1:1"
   },
   "dependencies": {
     "@remotion/cli": "4.0.441",
@@ -30,6 +34,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
     "tailwindcss": "^4",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   }
 }

@@ -2,7 +2,7 @@
 
 ## Aktueller Status
 - **Phase:** 1 — Remotion Setup + Core Animation + Erstes Video
-- **Aktuelle Story:** 1.5 — Video-Rendering + CLI
+- **Aktuelle Story:** 1.6 — Visual Polish
 - **Status:** IN PROGRESS
 
 ## Phase 1: Remotion Setup + Core Animation + Erstes Video
@@ -10,7 +10,7 @@
 - [x] **1.2** Bar Chart Race Kern-Animation (Balken, Reordering, Counter)
 - [x] **1.3** Bilder/Logos an Balken
 - [x] **1.4** Audio + Intro/Outro
-- [ ] **1.5** Video-Rendering + CLI (erstes fertiges MP4)
+- [x] **1.5** Video-Rendering + CLI (erstes fertiges MP4)
 - [ ] **1.6** Visual Polish der Animation
 
 ## Phase 2: AI-Datenrecherche
