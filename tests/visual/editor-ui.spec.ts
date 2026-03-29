@@ -20,7 +20,7 @@ test.describe("ChartRacer Dashboard", () => {
   test("zeigt Stats-Karten", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByText("ChartRacer").first()).toBeVisible({ timeout: 15000 });
-    await expect(page.getByText("2015 – 2025")).toBeVisible();
+    await expect(page.getByText("2015 – 2025").first()).toBeVisible();
     await expect(page.getByText("1920 × 1080 · 30fps")).toBeVisible();
     await expect(page.getByText("Bar Chart Race", { exact: true })).toBeVisible();
   });

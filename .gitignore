@@ -50,5 +50,11 @@ tests/screenshots/
 *.mov
 out/
 
+# database
+/data/
+*.db
+*.db-shm
+*.db-wal
+
 # ide
 .idea/
